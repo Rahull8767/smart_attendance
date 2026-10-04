@@ -1,0 +1,46 @@
+[
+    {
+        "merged": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-mergeDebugResources-52:\\layout\\activity_correction_request.xml",
+        "source": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-main-55:\\layout\\activity_correction_request.xml"
+    },
+    {
+        "merged": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-mergeDebugResources-52:\\layout\\activity_site_management.xml",
+        "source": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-main-55:\\layout\\activity_site_management.xml"
+    },
+    {
+        "merged": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-mergeDebugResources-52:\\layout\\activity_login.xml",
+        "source": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-main-55:\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-mergeDebugResources-52:\\layout\\activity_face_verification.xml",
+        "source": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-main-55:\\layout\\activity_face_verification.xml"
+    },
+    {
+        "merged": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-mergeDebugResources-52:\\layout\\activity_manager_dashboard.xml",
+        "source": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-main-55:\\layout\\activity_manager_dashboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-mergeDebugResources-52:\\layout\\activity_attendance_history.xml",
+        "source": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-main-55:\\layout\\activity_attendance_history.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-mergeDebugResources-52:/layout/activity_ceo_dashboard.xml",
+        "source": "com.company.fieldattendance.app-main-55:/layout/activity_ceo_dashboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-mergeDebugResources-52:\\layout\\activity_reports.xml",
+        "source": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-main-55:\\layout\\activity_reports.xml"
+    },
+    {
+        "merged": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-mergeDebugResources-52:\\layout\\activity_provider_dashboard.xml",
+        "source": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-main-55:\\layout\\activity_provider_dashboard.xml"
+    },
+    {
+        "merged": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-mergeDebugResources-52:\\layout\\activity_employee_management.xml",
+        "source": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-main-55:\\layout\\activity_employee_management.xml"
+    },
+    {
+        "merged": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-mergeDebugResources-52:\\layout\\activity_employee_dashboard.xml",
+        "source": "C:\\Users\\rahul\\.gradle\\daemon\\8.6\\com.company.fieldattendance.app-main-55:\\layout\\activity_employee_dashboard.xml"
+    }
+]

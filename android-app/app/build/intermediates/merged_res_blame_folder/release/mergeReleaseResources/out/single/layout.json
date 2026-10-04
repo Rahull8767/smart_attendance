@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "com.company.fieldattendance.app-mergeReleaseResources-52:/layout/activity_face_verification.xml",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_face_verification.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-mergeReleaseResources-52:/layout/activity_attendance_history.xml",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_attendance_history.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-mergeReleaseResources-52:/layout/activity_ceo_dashboard.xml",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_ceo_dashboard.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-mergeReleaseResources-52:/layout/activity_reports.xml",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_reports.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-mergeReleaseResources-52:/layout/activity_employee_dashboard.xml",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_employee_dashboard.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-mergeReleaseResources-52:/layout/activity_correction_request.xml",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_correction_request.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-mergeReleaseResources-52:/layout/activity_employee_management.xml",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_employee_management.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-mergeReleaseResources-52:/layout/activity_login.xml",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-mergeReleaseResources-52:/layout/activity_provider_dashboard.xml",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_provider_dashboard.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-mergeReleaseResources-52:/layout/activity_site_management.xml",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_site_management.xml"
+    }
+]

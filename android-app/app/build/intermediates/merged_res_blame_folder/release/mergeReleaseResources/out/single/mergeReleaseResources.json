@@ -1,0 +1,46 @@
+[
+    {
+        "merged": "com.company.fieldattendance.app-release-53:/layout_activity_attendance_history.xml.flat",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_attendance_history.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-release-53:/layout_activity_correction_request.xml.flat",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_correction_request.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-release-53:/layout_activity_employee_management.xml.flat",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_employee_management.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-release-53:/layout_activity_face_verification.xml.flat",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_face_verification.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-release-53:/layout_activity_reports.xml.flat",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_reports.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-release-53:/layout_activity_site_management.xml.flat",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_site_management.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-release-53:/layout_activity_login.xml.flat",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-release-53:/layout_activity_provider_dashboard.xml.flat",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_provider_dashboard.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-release-53:/layout_activity_ceo_dashboard.xml.flat",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_ceo_dashboard.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-release-53:/layout_activity_employee_dashboard.xml.flat",
+        "source": "com.company.fieldattendance.app-main-54:/layout/activity_employee_dashboard.xml"
+    },
+    {
+        "merged": "com.company.fieldattendance.app-release-53:/drawable_avatar_bg.xml.flat",
+        "source": "com.company.fieldattendance.app-main-54:/drawable/avatar_bg.xml"
+    }
+]
