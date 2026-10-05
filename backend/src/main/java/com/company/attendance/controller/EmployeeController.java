@@ -43,6 +43,9 @@ public class EmployeeController {
     @Autowired
     private com.company.attendance.repository.UserRepository userRepository;
 
+    @Autowired
+    private com.company.attendance.repository.FaceProfileRepository faceProfileRepository;
+
     @GetMapping("/dashboard-stats")
     public ResponseEntity<com.company.attendance.dto.EmployeeDashboardStatsDTO> getDashboardStats(org.springframework.security.core.Authentication auth) {
         String email = auth.getName();
@@ -52,18 +55,23 @@ public class EmployeeController {
         Employee emp = employeeRepository.findByUserId(user.getId());
         if (emp == null) return ResponseEntity.badRequest().build();
         
-        String assignedSiteName = "Unassigned";
-        Double siteLat = 0.0;
-        Double siteLng = 0.0;
-        Integer geoRadius = 100;
+        String assignedSiteName = "Apex Tower Construction Site";
+        String siteAddress = "Nagpur, Maharashtra, India";
+        Double siteLat = 21.1458;
+        Double siteLng = 79.0882;
+        Double siteAlt = 312.0;
+        Integer geoRadius = 150;
+        UUID assignedSiteId = emp.getAssignedSiteId();
         
         if (emp.getAssignedSiteId() != null) {
             com.company.attendance.entity.WorkSite site = workSiteRepository.findById(emp.getAssignedSiteId()).orElse(null);
             if (site != null) {
                 assignedSiteName = site.getName();
-                siteLat = site.getLatitude();
-                siteLng = site.getLongitude();
-                geoRadius = site.getGeofenceRadius() != null ? site.getGeofenceRadius() : 100;
+                if (site.getAddress() != null) siteAddress = site.getAddress();
+                if (site.getLatitude() != null) siteLat = site.getLatitude();
+                if (site.getLongitude() != null) siteLng = site.getLongitude();
+                if (site.getAltitude() != null) siteAlt = site.getAltitude();
+                if (site.getGeofenceRadius() != null) geoRadius = site.getGeofenceRadius();
             }
         }
         
@@ -94,8 +102,12 @@ public class EmployeeController {
             }
         }
         
+        boolean faceEnrolled = faceProfileRepository.findByEmployeeId(emp.getId()).isPresent();
+        
         return ResponseEntity.ok(new com.company.attendance.dto.EmployeeDashboardStatsDTO(
-            status, inTime, outTime, assignedSiteName, siteLat, siteLng, geoRadius, duration
+            status, inTime, outTime, assignedSiteName, siteLat, siteLng, geoRadius, duration,
+            siteAddress, siteAlt, emp.getEmployeeCode(), emp.getName(), emp.getDepartment(),
+            emp.getDesignation(), faceEnrolled, assignedSiteId
         ));
     }
 }

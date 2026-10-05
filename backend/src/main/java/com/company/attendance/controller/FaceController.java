@@ -22,11 +22,23 @@ public class FaceController {
     @Autowired
     private FaceProfileRepository faceProfileRepository;
 
+    private List<Float> parseEmbedding(Object raw) {
+        if (raw == null) return java.util.Collections.emptyList();
+        List<?> list = (List<?>) raw;
+        List<Float> floats = new java.util.ArrayList<>(list.size());
+        for (Object item : list) {
+            if (item instanceof Number) {
+                floats.add(((Number) item).floatValue());
+            }
+        }
+        return floats;
+    }
+
     @PostMapping("/enroll")
     public ResponseEntity<?> enrollFace(@RequestBody Map<String, Object> payload) {
         try {
             UUID employeeId = UUID.fromString((String) payload.get("employeeId"));
-            List<Float> embedding = (List<Float>) payload.get("embedding");
+            List<Float> embedding = parseEmbedding(payload.get("embedding"));
             
             String status = faceVerificationService.enrollFace(employeeId, embedding);
             return ResponseEntity.ok(Map.of("success", true, "message", "Face enrolled successfully"));
@@ -39,7 +51,7 @@ public class FaceController {
     public ResponseEntity<?> verifyFace(@RequestBody Map<String, Object> payload) {
         try {
             UUID employeeId = UUID.fromString((String) payload.get("employeeId"));
-            List<Float> embedding = (List<Float>) payload.get("embedding");
+            List<Float> embedding = parseEmbedding(payload.get("embedding"));
             
             boolean isVerified = faceVerificationService.verifyFace(employeeId, embedding);
             
@@ -51,5 +63,11 @@ public class FaceController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Verification failed: " + e.getMessage()));
         }
+    }
+
+    @GetMapping("/profile/{employeeId}")
+    public ResponseEntity<?> getFaceProfile(@PathVariable UUID employeeId) {
+        boolean enrolled = faceProfileRepository.findByEmployeeId(employeeId).isPresent();
+        return ResponseEntity.ok(Map.of("enrolled", enrolled, "employeeId", employeeId.toString()));
     }
 }

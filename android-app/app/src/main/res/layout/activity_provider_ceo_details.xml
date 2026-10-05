@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/provider_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:background="@color/provider_surface_secondary">
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_revert"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CEO Details"
+            android:textColor="@color/provider_text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+            
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:src="@android:drawable/ic_menu_camera"
+                android:background="@color/provider_surface"/>
+                
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading..."
+                android:textColor="@color/provider_text_primary"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"/>
+                
+            <TextView
+                android:id="@+id/tvCompany"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/provider_text_secondary"
+                android:textSize="16sp"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"/>
+                
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/provider_success"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:background="#1A22C55E"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"/>
+                
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="2"
+                android:layout_marginTop="24dp">
+                
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/provider_surface"
+                    android:padding="16dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView android:text="Employees" android:textColor="@color/provider_text_secondary" android:textSize="12sp"/>
+                    <TextView android:id="@+id/tvEmployeeCount" android:text="-" android:textColor="@color/provider_text_primary" android:textSize="20sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@color/provider_surface"
+                    android:padding="16dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <TextView android:text="Sites" android:textColor="@color/provider_text_secondary" android:textSize="12sp"/>
+                    <TextView android:id="@+id/tvSiteCount" android:text="-" android:textColor="@color/provider_text_primary" android:textSize="20sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                </LinearLayout>
+            </GridLayout>
+            
+            <TextView android:text="ORGANIZATION" android:textColor="@color/provider_text_secondary" android:textStyle="bold" android:layout_marginTop="24dp" android:layout_marginBottom="8dp"/>
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@color/provider_surface" android:padding="16dp" android:orientation="vertical">
+                <TextView android:id="@+id/tvIndustry" android:text="Industry: -" android:textColor="@color/provider_text_primary" android:layout_marginBottom="8dp"/>
+                <TextView android:id="@+id/tvEmail" android:text="Email: -" android:textColor="@color/provider_text_primary" android:layout_marginBottom="8dp"/>
+                <TextView android:id="@+id/tvPhone" android:text="Phone: -" android:textColor="@color/provider_text_primary"/>
+            </LinearLayout>
+            
+            <TextView android:text="ACTIONS" android:textColor="@color/provider_text_secondary" android:textStyle="bold" android:layout_marginTop="24dp" android:layout_marginBottom="8dp"/>
+            <Button
+                android:id="@+id/btnDeactivate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Deactivate CEO"
+                android:backgroundTint="#33EF4444"
+                android:textColor="@color/provider_error"
+                android:layout_marginBottom="8dp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

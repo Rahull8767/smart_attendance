@@ -1,29 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="#F8FAFC">
+
+    <!-- Top App Bar -->
+    <LinearLayout
+        android:id="@+id/attHeaderLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="16dp"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBackReports"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_menu_revert"
+            app:tint="#0F172A" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:text="Attendance Records"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#0F172A" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnExportCsv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Export CSV"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:cornerRadius="8dp"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/attDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E2E8F0"
+        app:layout_constraintTop_toBottomOf="@id/attHeaderLayout" />
+
+    <!-- Summary Stats Bar -->
+    <LinearLayout
+        android:id="@+id/summaryStatsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="12dp"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/attDivider">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvSummaryPresentCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="03"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#16A34A" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Present"
+                android:textSize="11sp"
+                android:textColor="#64748B" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvSummaryFaceVerified"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100%"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#2563EB" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Face Verified"
+                android:textSize="11sp"
+                android:textColor="#64748B" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvSummaryLocVerified"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100%"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#2563EB" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location Verified"
+                android:textSize="11sp"
+                android:textColor="#64748B" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Filter Chips: Today, Yesterday, This Week, This Month -->
+    <HorizontalScrollView
+        android:id="@+id/scrollFilters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="8dp"
+        android:scrollbars="none"
+        android:background="#F8FAFC"
+        app:layout_constraintTop_toBottomOf="@id/summaryStatsLayout">
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupAttFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true">
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAttToday"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="Today" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAttYesterday"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yesterday" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAttThisWeek"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This Week" />
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAttThisMonth"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This Month" />
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <!-- Records RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAttendanceRecords"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/scrollFilters"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavCeo" />
 
     <TextView
+        android:id="@+id/tvEmptyAttendance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Attendance Reports"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:text="No attendance records found"
+        android:textColor="#64748B"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/scrollFilters"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavCeo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/btnExportCsv"
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:text="EXPORT CSV REPORT"
-        android:layout_marginBottom="16dp" />
-
-    <TextView
-        android:id="@+id/tvAnalytics"
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavCeo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Analytics will load here..."
-        android:textSize="16sp" />
-</LinearLayout>
+        android:background="#FFFFFF"
+        app:elevation="8dp"
+        app:itemIconTint="#2563EB"
+        app:itemTextColor="#0F172A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_ceo" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

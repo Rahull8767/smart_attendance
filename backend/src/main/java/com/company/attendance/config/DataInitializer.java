@@ -37,14 +37,18 @@ public class DataInitializer implements CommandLineRunner {
         Provider provider = null;
         if (providerRepository.findAll().isEmpty()) {
             provider = new Provider();
-            provider.setCompanyName("Test Provider Agency");
-            provider.setContactPerson("John Smith");
+            provider.setCompanyName("FieldTrack Solutions");
+            provider.setContactPerson("Operations Admin");
             provider.setEmail("provider@test.com");
-            provider.setPhone("555-0100");
+            provider.setPhone("+91 98765 43210");
             provider.setStatus("ACTIVE");
             provider = providerRepository.save(provider);
         } else {
             provider = providerRepository.findAll().get(0);
+            if (!"FieldTrack Solutions".equals(provider.getCompanyName())) {
+                provider.setCompanyName("FieldTrack Solutions");
+                providerRepository.save(provider);
+            }
         }
 
         if (userRepository.findByEmail("provider@test.com").isEmpty()) {
@@ -57,53 +61,30 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Test Provider created: provider@test.com");
         }
 
-        // 2. Create CEO
+        // 2. Create CEO: Rahul Sharma, Apex Infrastructure Pvt. Ltd.
         com.company.attendance.entity.Ceo ceoEntity = null;
-        if (userRepository.findByEmail("ceo@test.com").isEmpty()) {
+        if (userRepository.findByEmail("ceotest@example.com").isEmpty()) {
             User ceo = new User();
             ceo.setRole("ROLE_CEO");
-            ceo.setEmail("ceo@test.com");
-            ceo.setPasswordHash(passwordEncoder.encode("ChangeMe123!"));
+            ceo.setEmail("ceotest@example.com");
+            ceo.setPasswordHash(passwordEncoder.encode("password123"));
             ceo.setProviderId(provider.getId());
             ceo = userRepository.save(ceo);
             
             ceoEntity = new com.company.attendance.entity.Ceo();
             ceoEntity.setUserId(ceo.getId());
             ceoEntity.setProviderId(provider.getId());
-            ceoEntity.setName("Alice CEO");
-            ceoEntity.setEmail("ceo@test.com");
-            ceoEntity.setPhone("555-0200");
+            ceoEntity.setName("Rahul Sharma");
+            ceoEntity.setEmail("ceotest@example.com");
+            ceoEntity.setPhone("+91 98230 11223");
             ceoEntity.setDesignation("Chief Executive Officer");
             ceoEntity.setStatus("ACTIVE");
             ceoEntity = ceoRepository.save(ceoEntity);
-            System.out.println("Test CEO created: ceo@test.com");
+            System.out.println("CEO created: ceotest@example.com");
         } else {
-            User ceoUser = userRepository.findByEmail("ceo@test.com").get();
+            User ceoUser = userRepository.findByEmail("ceotest@example.com").get();
             ceoEntity = ceoRepository.findByUserId(ceoUser.getId()).orElse(null);
-        }
-
-        // 3. Create Employee
-        if (userRepository.findByEmail("employee@test.com").isEmpty()) {
-            User empUser = new User();
-            empUser.setProviderId(provider.getId());
-            empUser.setRole("ROLE_EMPLOYEE");
-            empUser.setEmail("employee@test.com");
-            empUser.setPasswordHash(passwordEncoder.encode("password123"));
-            empUser = userRepository.save(empUser);
-
-            Employee emp = new Employee();
-            emp.setUserId(empUser.getId());
-            emp.setProviderId(provider.getId());
-            if (ceoEntity != null) {
-                emp.setCeoId(ceoEntity.getId());
-            }
-            emp.setEmployeeCode("EMP001");
-            emp.setName("Jane Doe");
-            emp.setDepartment("Field Operations");
-            emp.setDesignation("Field Agent");
-            emp.setStatus("ACTIVE");
-            employeeRepository.save(emp);
-            System.out.println("Test Employee created: employee@test.com");
         }
     }
 }
+

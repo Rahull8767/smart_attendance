@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/provider_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:background="@color/provider_surface_secondary">
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_revert"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create CEO"
+            android:textColor="@color/provider_text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/successLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:visibility="gone">
+        <TextView android:text="CEO CREATED" android:textColor="@color/provider_success" android:textSize="24sp" android:textStyle="bold"/>
+        <TextView android:id="@+id/tvCreatedCeoName" android:text="Account is ready" android:textColor="@color/provider_text_secondary" android:layout_marginTop="8dp"/>
+        <Button android:id="@+id/btnViewCeo" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="VIEW CEO" android:layout_marginTop="24dp" android:backgroundTint="@color/provider_primary" android:textColor="@color/provider_background"/>
+        <Button android:id="@+id/btnDone" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="DONE" android:layout_marginTop="8dp" android:backgroundTint="@color/provider_surface" android:textColor="@color/provider_text_primary"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/formLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+            
+            <TextView android:text="PERSONAL INFORMATION" android:textColor="@color/provider_primary" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+            <EditText android:id="@+id/etName" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Full Name" android:background="@color/provider_surface" android:textColor="@color/provider_text_primary" android:textColorHint="@color/provider_text_muted" android:padding="16dp" android:layout_marginBottom="16dp"/>
+            <EditText android:id="@+id/etEmail" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Contact Email" android:background="@color/provider_surface" android:textColor="@color/provider_text_primary" android:textColorHint="@color/provider_text_muted" android:padding="16dp" android:layout_marginBottom="16dp"/>
+            <EditText android:id="@+id/etPhone" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Phone" android:background="@color/provider_surface" android:textColor="@color/provider_text_primary" android:textColorHint="@color/provider_text_muted" android:padding="16dp" android:layout_marginBottom="32dp"/>
+            
+            <TextView android:text="ORGANIZATION" android:textColor="@color/provider_primary" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+            <EditText android:id="@+id/etCompanyName" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Company Name" android:background="@color/provider_surface" android:textColor="@color/provider_text_primary" android:textColorHint="@color/provider_text_muted" android:padding="16dp" android:layout_marginBottom="16dp"/>
+            <EditText android:id="@+id/etIndustry" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Industry" android:background="@color/provider_surface" android:textColor="@color/provider_text_primary" android:textColorHint="@color/provider_text_muted" android:padding="16dp" android:layout_marginBottom="32dp"/>
+            
+            <TextView android:text="ACCOUNT" android:textColor="@color/provider_primary" android:textStyle="bold" android:layout_marginBottom="8dp"/>
+            <EditText android:id="@+id/etLoginEmail" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Login Email" android:background="@color/provider_surface" android:textColor="@color/provider_text_primary" android:textColorHint="@color/provider_text_muted" android:padding="16dp" android:layout_marginBottom="16dp"/>
+            <EditText android:id="@+id/etPassword" android:layout_width="match_parent" android:layout_height="56dp" android:hint="Password" android:inputType="textPassword" android:background="@color/provider_surface" android:textColor="@color/provider_text_primary" android:textColorHint="@color/provider_text_muted" android:padding="16dp" android:layout_marginBottom="16dp"/>
+            
+            <Button
+                android:id="@+id/btnCreate"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="CREATE CEO"
+                android:backgroundTint="@color/provider_primary"
+                android:textColor="@color/provider_background"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="40dp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -24,6 +24,7 @@ android {
             baseUrl = '"' + baseUrl + '"'
         }
         buildConfigField "String", "BASE_URL", baseUrl
+        buildConfigField "boolean", "PRESENTATION_ACCESS_ENABLED", "true"
     }
 
     buildTypes {

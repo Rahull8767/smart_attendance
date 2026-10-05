@@ -10,7 +10,7 @@ import com.company.fieldattendance.data.local.SessionManager;
 import com.company.fieldattendance.ui.auth.LoginActivity;
 import com.company.fieldattendance.ui.employee.EmployeeDashboardActivity;
 import com.company.fieldattendance.ui.ceo.CeoDashboardActivity;
-import com.company.fieldattendance.ui.provider.ProviderDashboardActivity;
+import com.company.fieldattendance.ui.provider.ProviderHomeActivity;
 
 public class SplashActivity extends AppCompatActivity {
     private SessionManager sessionManager;
@@ -26,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
                 if ("ROLE_CEO".equals(role)) {
                     startActivity(new Intent(this, CeoDashboardActivity.class));
                 } else if ("ROLE_PROVIDER".equals(role)) {
-                    startActivity(new Intent(this, ProviderDashboardActivity.class));
+                    startActivity(new Intent(this, ProviderHomeActivity.class));
                 } else {
                     startActivity(new Intent(this, EmployeeDashboardActivity.class));
                 }

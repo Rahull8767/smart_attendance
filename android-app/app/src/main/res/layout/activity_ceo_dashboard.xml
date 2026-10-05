@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground">
+    android:background="#F8FAFC">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="24dp">
+                android:layout_marginBottom="20dp">
                 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -36,37 +36,41 @@
                         android:id="@+id/tvCeoGreeting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="Good morning, CEO"
-                        android:textSize="24sp"
+                        android:text="Good morning, Rahul"
+                        android:textSize="22sp"
                         android:textStyle="bold"
-                        android:textColor="?android:textColorPrimary" />
+                        android:textColor="#0F172A" />
                     <TextView
                         android:id="@+id/tvCeoCompany"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        tools:text="Global Organization"
+                        android:layout_marginTop="2dp"
+                        android:text="Apex Infrastructure Pvt. Ltd."
                         android:textSize="14sp"
-                        android:textColor="?android:textColorSecondary" />
+                        android:textStyle="bold"
+                        android:textColor="#2563EB" />
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@android:drawable/ic_popup_reminder"
-                    app:tint="?android:textColorSecondary" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCeoLogout"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Logout"
+                    android:textColor="#DC2626"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="System Overview"
-                android:textSize="18sp"
+                android:text="Overview"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="?android:textColorPrimary"
-                android:layout_marginBottom="16dp"/>
+                android:textColor="#0F172A"
+                android:layout_marginBottom="12dp"/>
 
-            <!-- KPI Grid -->
+            <!-- 6 KPI Grid -->
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,42 +79,17 @@
                 android:useDefaultMargins="true"
                 android:layout_marginHorizontal="-4dp">
 
-                <!-- Total Employees -->
+                <!-- 1. Present -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    app:cardBackgroundColor="?attr/colorSurface">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-                        <TextView
-                            android:id="@+id/tvTotalEmployees"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="0"
-                            android:textSize="28sp"
-                            android:textStyle="bold"
-                            android:textColor="?attr/colorPrimary" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Total Employees"
-                            android:textSize="12sp"
-                            android:textColor="?android:textColorHint" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Present Today -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="?attr/colorSurface">
+                    app:cardElevation="1dp"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#FFFFFF">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -120,26 +99,31 @@
                             android:id="@+id/tvPresentToday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="0"
-                            android:textSize="28sp"
+                            android:text="18"
+                            android:textSize="26sp"
                             android:textStyle="bold"
-                            android:textColor="@color/success" />
+                            android:textColor="#16A34A" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Present Today"
+                            android:layout_marginTop="2dp"
+                            android:text="Present"
                             android:textSize="12sp"
-                            android:textColor="?android:textColorHint" />
+                            android:textColor="#64748B" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Absent -->
+                <!-- 2. Absent -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    app:cardBackgroundColor="?attr/colorSurface">
+                    app:cardElevation="1dp"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#FFFFFF">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -149,84 +133,65 @@
                             android:id="@+id/tvAbsentToday"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="0"
-                            android:textSize="28sp"
+                            android:text="04"
+                            android:textSize="26sp"
                             android:textStyle="bold"
-                            android:textColor="@color/error" />
+                            android:textColor="#DC2626" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Absent Today"
+                            android:layout_marginTop="2dp"
+                            android:text="Absent"
                             android:textSize="12sp"
-                            android:textColor="?android:textColorHint" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-                
-                <!-- Late -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="?attr/colorSurface">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-                        <TextView
-                            android:id="@+id/tvLateToday"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="0"
-                            android:textSize="28sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/warning" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Late Today"
-                            android:textSize="12sp"
-                            android:textColor="?android:textColorHint" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-                
-                <!-- Attendance Percentage -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="4dp"
-                    app:cardBackgroundColor="?attr/colorSurface">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-                        <TextView
-                            android:id="@+id/tvAttendancePercentage"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="0%"
-                            android:textSize="28sp"
-                            android:textStyle="bold"
-                            android:textColor="?android:textColorPrimary" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Attendance %"
-                            android:textSize="12sp"
-                            android:textColor="?android:textColorHint" />
+                            android:textColor="#64748B" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Active Sites -->
+                <!-- 3. On Field -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:layout_margin="4dp"
-                    app:cardBackgroundColor="?attr/colorSurface">
+                    app:cardElevation="1dp"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#FFFFFF">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                        <TextView
+                            android:id="@+id/tvOnField"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="02"
+                            android:textSize="26sp"
+                            android:textStyle="bold"
+                            android:textColor="#2563EB" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="On Field"
+                            android:textSize="12sp"
+                            android:textColor="#64748B" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- 4. Active Sites -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    app:cardElevation="1dp"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#FFFFFF">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -236,49 +201,123 @@
                             android:id="@+id/tvActiveSites"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="0"
-                            android:textSize="28sp"
+                            android:text="03"
+                            android:textSize="26sp"
                             android:textStyle="bold"
-                            android:textColor="?android:textColorPrimary" />
+                            android:textColor="#0F172A" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
                             android:text="Active Sites"
                             android:textSize="12sp"
-                            android:textColor="?android:textColorHint" />
+                            android:textColor="#64748B" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- 5. Employees -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    app:cardElevation="1dp"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#FFFFFF">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                        <TextView
+                            android:id="@+id/tvTotalEmployees"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="24"
+                            android:textSize="26sp"
+                            android:textStyle="bold"
+                            android:textColor="#0F172A" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Employees"
+                            android:textSize="12sp"
+                            android:textColor="#64748B" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- 6. Verification Rate -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="4dp"
+                    app:cardElevation="1dp"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#FFFFFF">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+                        <TextView
+                            android:id="@+id/tvVerificationRate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="98.2%"
+                            android:textSize="26sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Verification Rate"
+                            android:textSize="12sp"
+                            android:textColor="#64748B" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </GridLayout>
 
-            <!-- Chart / Map Section -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Live Site Map"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="?android:textColorPrimary"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="12dp"/>
-                
-            <com.google.android.material.card.MaterialCardView
+            <!-- Recent Field Activity Section -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:cardBackgroundColor="?attr/colorSurfaceVariant">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="12dp">
                 
-                <FrameLayout
-                    android:id="@+id/ceoMapContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Map Loading..."
-                        android:textColor="?android:textColorHint"
-                        android:textSize="14sp" />
-                </FrameLayout>
-            </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Recent Field Activity"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#0F172A" />
+
+                <TextView
+                    android:id="@+id/btnViewAllAttendance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View All"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#2563EB"
+                    android:padding="4dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutRecentActivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
 
         </LinearLayout>
     </ScrollView>
@@ -288,6 +327,10 @@
         android:id="@+id/bottomNavCeo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:elevation="8dp"
+        app:itemIconTint="#2563EB"
+        app:itemTextColor="#0F172A"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_ceo" />
 

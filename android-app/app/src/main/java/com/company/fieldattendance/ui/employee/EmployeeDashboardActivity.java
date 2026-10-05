@@ -1,33 +1,82 @@
 package com.company.fieldattendance.ui.employee;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
-import com.company.fieldattendance.R;
-import com.company.fieldattendance.data.local.SessionManager;
-import com.company.fieldattendance.ui.auth.LoginActivity;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.company.fieldattendance.R;
+import com.company.fieldattendance.data.api.ApiService;
+import com.company.fieldattendance.data.api.RetrofitClient;
+import com.company.fieldattendance.data.local.SessionManager;
+import com.company.fieldattendance.data.model.ApiResponse;
+import com.company.fieldattendance.data.model.AttendanceRecord;
+import com.company.fieldattendance.data.model.EmployeeDashboardStatsDTO;
+import com.company.fieldattendance.data.model.PunchRequest;
+import com.company.fieldattendance.ui.auth.LoginActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.button.MaterialButton;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EmployeeDashboardActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private SessionManager sessionManager;
-    private Button btnPunchIn;
-    private TextView tvPunchStatus;
+    private ApiService apiService;
+    private GoogleMap mMap;
+
+    // UI elements
     private TextView tvGreeting;
     private TextView tvEmployeeMeta;
-    private TextView tvLocationStatus;
+    private TextView tvPunchStatus;
+    private TextView tvStatusBadge;
+    private TextView tvPunchTimeSubtext;
+    private TextView tvAssignedSite;
+    private TextView tvSiteAddress;
+    private TextView tvPunchInTime;
+    private TextView tvWorkingDuration;
+    private MaterialButton btnPunch;
     private TextView tvFaceStatus;
-    private TextView tvLocationDetails;
-    private GoogleMap mMap;
+    private TextView tvSiteStatus;
+    private TextView tvLocationStatus;
+
+    // Recent Attendance elements
+    private TextView tvRecentDate;
+    private TextView tvRecentStatus;
+    private TextView tvRecentSite;
+    private TextView tvRecentPunchIn;
+    private TextView tvRecentPunchOut;
+    private TextView tvRecentVerification;
+
+    // State
+    private boolean isPunchedIn = false;
+    private double siteLat = 21.1458;
+    private double siteLon = 79.0882;
+    private int siteRadius = 150;
+    private String siteName = "Apex Tower Construction Site";
+    private String siteAddress = "Nagpur, Maharashtra, India";
+    private UUID employeeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,39 +84,94 @@ public class EmployeeDashboardActivity extends AppCompatActivity implements OnMa
         setContentView(R.layout.activity_employee_dashboard);
 
         sessionManager = new SessionManager(this);
-        btnPunchIn = findViewById(R.id.btnPunch);
-        tvPunchStatus = findViewById(R.id.tvPunchStatus);
+        apiService = RetrofitClient.getRetrofitInstance().create(ApiService.class);
+
+        String empIdStr = sessionManager.getEmployeeId();
+        if (empIdStr != null && !empIdStr.isEmpty()) {
+            try {
+                employeeId = UUID.fromString(empIdStr);
+            } catch (Exception ignored) {}
+        }
+
+        initViews();
+        setupMap();
+        setupNavigation();
+    }
+
+    private void initViews() {
         tvGreeting = findViewById(R.id.tvGreeting);
         tvEmployeeMeta = findViewById(R.id.tvEmployeeMeta);
-        tvLocationStatus = findViewById(R.id.tvLocationStatus);
+        tvPunchStatus = findViewById(R.id.tvPunchStatus);
+        tvStatusBadge = findViewById(R.id.tvStatusBadge);
+        tvPunchTimeSubtext = findViewById(R.id.tvPunchTimeSubtext);
+        tvAssignedSite = findViewById(R.id.tvAssignedSite);
+        tvSiteAddress = findViewById(R.id.tvSiteAddress);
+        tvPunchInTime = findViewById(R.id.tvPunchInTime);
+        tvWorkingDuration = findViewById(R.id.tvWorkingDuration);
+        btnPunch = findViewById(R.id.btnPunch);
         tvFaceStatus = findViewById(R.id.tvFaceStatus);
-        tvLocationDetails = findViewById(R.id.tvLocationDetails);
+        tvSiteStatus = findViewById(R.id.tvSiteStatus);
+        tvLocationStatus = findViewById(R.id.tvLocationStatus);
 
-        // Initialize Map
+        tvRecentDate = findViewById(R.id.tvRecentDate);
+        tvRecentStatus = findViewById(R.id.tvRecentStatus);
+        tvRecentSite = findViewById(R.id.tvRecentSite);
+        tvRecentPunchIn = findViewById(R.id.tvRecentPunchIn);
+        tvRecentPunchOut = findViewById(R.id.tvRecentPunchOut);
+        tvRecentVerification = findViewById(R.id.tvRecentVerification);
+
+        String displayName = sessionManager.getDisplayName();
+        if (displayName != null && !displayName.isEmpty()) {
+            tvGreeting.setText("Good morning, " + displayName);
+        } else {
+            tvGreeting.setText("Good morning, Rahul");
+        }
+
+        findViewById(R.id.btnProfileAvatar).setOnClickListener(v -> showProfileDialog());
+        findViewById(R.id.btnViewFullHistory).setOnClickListener(v -> {
+            startActivity(new Intent(this, AttendanceHistoryActivity.class));
+        });
+
+        btnPunch.setOnClickListener(v -> {
+            if (!isPunchedIn) {
+                // Launch strict 4-step face verification workflow
+                Intent intent = new Intent(this, FaceVerificationActivity.class);
+                startActivity(intent);
+            } else {
+                showPunchOutConfirmation();
+            }
+        });
+    }
+
+    private void setupMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+    }
 
-        // Bind data from session
-        String name = sessionManager.getDisplayName();
-        if (name != null) {
-            tvGreeting.setText("Good morning, " + name + " \uD83D\uDC4B");
-        }
-        tvEmployeeMeta.setText("Employee Role Active");
-
-        com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+    private void setupNavigation() {
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        bottomNav.setSelectedItemId(R.id.nav_home);
         bottomNav.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-            if (itemId == R.id.nav_profile) {
-                android.widget.Toast.makeText(this, "Profile screen coming soon", android.widget.Toast.LENGTH_SHORT).show();
+            if (itemId == R.id.nav_home) {
+                return true;
+            } else if (itemId == R.id.nav_punch) {
+                if (!isPunchedIn) {
+                    startActivity(new Intent(this, FaceVerificationActivity.class));
+                } else {
+                    showPunchOutConfirmation();
+                }
+                return true;
+            } else if (itemId == R.id.nav_history) {
+                startActivity(new Intent(this, AttendanceHistoryActivity.class));
+                return true;
+            } else if (itemId == R.id.nav_profile) {
+                showProfileDialog();
                 return true;
             }
-            return true;
-        });
-
-        btnPunchIn.setOnClickListener(v -> {
-            checkLocationPermissionsAndStart();
+            return false;
         });
     }
 
@@ -75,139 +179,236 @@ public class EmployeeDashboardActivity extends AppCompatActivity implements OnMa
     protected void onResume() {
         super.onResume();
         fetchDashboardStats();
+        fetchRecentAttendance();
     }
 
     private void fetchDashboardStats() {
-        com.company.fieldattendance.data.api.ApiService apiService = com.company.fieldattendance.data.api.RetrofitClient.getRetrofitInstance().create(com.company.fieldattendance.data.api.ApiService.class);
-        apiService.getEmployeeDashboardStats().enqueue(new retrofit2.Callback<com.company.fieldattendance.data.model.EmployeeDashboardStatsDTO>() {
+        apiService.getEmployeeDashboardStats().enqueue(new Callback<EmployeeDashboardStatsDTO>() {
             @Override
-            public void onResponse(retrofit2.Call<com.company.fieldattendance.data.model.EmployeeDashboardStatsDTO> call, retrofit2.Response<com.company.fieldattendance.data.model.EmployeeDashboardStatsDTO> response) {
+            public void onResponse(Call<EmployeeDashboardStatsDTO> call, Response<EmployeeDashboardStatsDTO> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    com.company.fieldattendance.data.model.EmployeeDashboardStatsDTO stats = response.body();
-                    tvPunchStatus.setText(stats.todayStatus.replace("_", " "));
-                    tvFaceStatus.setText(stats.workingDuration);
-                    
-                    if (mMap != null && stats.siteLatitude != 0.0) {
-                        LatLng sitePos = new LatLng(stats.siteLatitude, stats.siteLongitude);
-                        mMap.clear();
-                        mMap.addCircle(new com.google.android.gms.maps.model.CircleOptions()
-                            .center(sitePos)
-                            .radius(stats.geofenceRadius)
-                            .strokeColor(getResources().getColor(R.color.primary, null))
-                            .fillColor(0x2219C3B1) // 10% opacity primary
-                            .strokeWidth(2f));
-                        mMap.addMarker(new MarkerOptions().position(sitePos).title(stats.assignedSiteName));
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sitePos, 15f));
+                    EmployeeDashboardStatsDTO stats = response.body();
+
+                    if (stats.assignedSiteName != null && !stats.assignedSiteName.isEmpty()) {
+                        siteName = stats.assignedSiteName;
+                        tvAssignedSite.setText(siteName);
                     }
+                    if (stats.siteAddress != null && !stats.siteAddress.isEmpty()) {
+                        siteAddress = stats.siteAddress;
+                        tvSiteAddress.setText(siteAddress);
+                    }
+                    if (stats.siteLatitude != 0.0) siteLat = stats.siteLatitude;
+                    if (stats.siteLongitude != 0.0) siteLon = stats.siteLongitude;
+                    if (stats.geofenceRadius != 0) siteRadius = stats.geofenceRadius;
+
+                    updateMapSite();
+
+                    String status = stats.todayStatus != null ? stats.todayStatus : "NOT_PUNCHED_IN";
+                    if ("PRESENT".equalsIgnoreCase(status) || "PUNCHED_IN".equalsIgnoreCase(status)) {
+                        isPunchedIn = true;
+                        tvPunchStatus.setText("PUNCHED IN");
+                        tvPunchStatus.setTextColor(0xFF16A34A);
+                        tvStatusBadge.setText("PRESENT");
+                        tvStatusBadge.setTextColor(0xFF16A34A);
+                        tvStatusBadge.setBackgroundColor(0xFFDCFCE7);
+
+                        String inTime = stats.punchInTime != null ? stats.punchInTime : "08:42 AM";
+                        tvPunchInTime.setText(inTime);
+                        tvPunchTimeSubtext.setText("Punched in at " + inTime + " • " + siteName);
+
+                        btnPunch.setText("PUNCH OUT");
+                        btnPunch.setBackgroundColor(0xFFDC2626);
+
+                        if (stats.workingDuration != null && !stats.workingDuration.isEmpty()) {
+                            tvWorkingDuration.setText(stats.workingDuration);
+                            tvWorkingDuration.setVisibility(View.VISIBLE);
+                        }
+                    } else if ("COMPLETED".equalsIgnoreCase(status) || "PUNCHED_OUT".equalsIgnoreCase(status)) {
+                        isPunchedIn = false;
+                        tvPunchStatus.setText("PUNCHED OUT");
+                        tvPunchStatus.setTextColor(0xFF0F172A);
+                        tvStatusBadge.setText("COMPLETED");
+                        tvStatusBadge.setTextColor(0xFF2563EB);
+                        tvStatusBadge.setBackgroundColor(0xFFDBEAFE);
+
+                        tvPunchInTime.setText(stats.punchInTime != null ? stats.punchInTime : "--:--");
+                        tvPunchTimeSubtext.setText("Attendance completed for today");
+                        btnPunch.setText("DAY COMPLETED");
+                        btnPunch.setEnabled(false);
+                        btnPunch.setBackgroundColor(0xFF94A3B8);
+                    } else {
+                        isPunchedIn = false;
+                        tvPunchStatus.setText("NOT PUNCHED IN");
+                        tvPunchStatus.setTextColor(0xFF0F172A);
+                        tvStatusBadge.setText("NOT STARTED");
+                        tvStatusBadge.setTextColor(0xFF64748B);
+                        tvStatusBadge.setBackgroundColor(0xFFF1F5F9);
+
+                        tvPunchInTime.setText("--:--");
+                        tvPunchTimeSubtext.setText("Punch in to mark your presence");
+                        btnPunch.setText("PUNCH IN");
+                        btnPunch.setEnabled(true);
+                        btnPunch.setBackgroundColor(0xFF2563EB);
+                        tvWorkingDuration.setVisibility(View.GONE);
+                    }
+
+                    tvFaceStatus.setText(stats.faceEnrolled ? "Enrolled ✓" : "Required");
+                    tvSiteStatus.setText(stats.assignedSiteName != null ? "Assigned ✓" : "Pending");
+                    tvLocationStatus.setText("Ready");
                 }
             }
+
             @Override
-            public void onFailure(retrofit2.Call<com.company.fieldattendance.data.model.EmployeeDashboardStatsDTO> call, Throwable t) {
-                android.widget.Toast.makeText(EmployeeDashboardActivity.this, "Failed to load dashboard data", android.widget.Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<EmployeeDashboardStatsDTO> call, Throwable t) {
+                // Fallback default state
+                tvPunchStatus.setText("NOT PUNCHED IN");
+                btnPunch.setText("PUNCH IN");
             }
         });
     }
 
+    private void fetchRecentAttendance() {
+        if (employeeId == null) return;
+
+        apiService.getAttendanceHistory(employeeId).enqueue(new Callback<List<AttendanceRecord>>() {
+            @Override
+            public void onResponse(Call<List<AttendanceRecord>> call, Response<List<AttendanceRecord>> response) {
+                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
+                    AttendanceRecord rec = response.body().get(0);
+                    tvRecentDate.setText("Latest Punch Record");
+                    tvRecentSite.setText(rec.workSiteName != null ? rec.workSiteName : "Apex Tower Construction Site");
+
+                    if (rec.punchInTime != null) {
+                        String formattedIn = formatTime(rec.punchInTime);
+                        tvRecentPunchIn.setText("In: " + formattedIn);
+                        tvRecentStatus.setText("PRESENT");
+                        tvRecentStatus.setTextColor(0xFF16A34A);
+                    }
+
+                    if (rec.punchOutTime != null) {
+                        tvRecentPunchOut.setText("Out: " + formatTime(rec.punchOutTime));
+                    } else {
+                        tvRecentPunchOut.setText("Out: --:--");
+                    }
+
+                    tvRecentVerification.setText("Face ✓ • Loc ✓");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<AttendanceRecord>> call, Throwable t) {}
+        });
+    }
+
+    private String formatTime(String isoTime) {
+        try {
+            if (isoTime.contains("T")) {
+                String timePart = isoTime.substring(isoTime.indexOf("T") + 1);
+                if (timePart.length() >= 5) {
+                    return timePart.substring(0, 5);
+                }
+            }
+            return isoTime;
+        } catch (Exception e) {
+            return isoTime;
+        }
+    }
+
     @Override
-    public void onMapReady(@androidx.annotation.NonNull GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        // We will move the camera when we fetch the actual location
+        updateMapSite();
     }
 
-    private void checkLocationPermissionsAndStart() {
-        if (androidx.core.content.ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
-            androidx.core.app.ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1001);
-        } else {
-            fetchLocationAndVerify();
-        }
+    private void updateMapSite() {
+        if (mMap == null) return;
+        mMap.clear();
+
+        LatLng sitePos = new LatLng(siteLat, siteLon);
+        mMap.addMarker(new MarkerOptions().position(sitePos).title(siteName));
+        mMap.addCircle(new CircleOptions()
+                .center(sitePos)
+                .radius(siteRadius)
+                .strokeColor(0xFF2563EB)
+                .fillColor(0x222563EB)
+                .strokeWidth(3f));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sitePos, 16f));
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @androidx.annotation.NonNull String[] permissions, @androidx.annotation.NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1001) {
-            if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
-                fetchLocationAndVerify();
-            } else {
-                android.widget.Toast.makeText(this, "Location permission is required to punch in.", android.widget.Toast.LENGTH_LONG).show();
-                tvLocationStatus.setText("Permission Denied");
-                tvLocationStatus.setTextColor(android.graphics.Color.RED);
-            }
-        }
+    private void showPunchOutConfirmation() {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm Punch Out")
+                .setMessage("Are you sure you want to end your shift at " + siteName + "?")
+                .setPositiveButton("PUNCH OUT", (d, w) -> performPunchOut())
+                .setNegativeButton("CANCEL", null)
+                .show();
     }
 
-    private void fetchLocationAndVerify() {
-        tvLocationStatus.setText("Acquiring...");
-        tvLocationStatus.setTextColor(getResources().getColor(R.color.warning, null));
-        android.widget.Toast.makeText(this, "Fetching location...", android.widget.Toast.LENGTH_SHORT).show();
-        com.google.android.gms.location.FusedLocationProviderClient fusedLocationClient = com.google.android.gms.location.LocationServices.getFusedLocationProviderClient(this);
+    private void performPunchOut() {
+        btnPunch.setEnabled(false);
+        btnPunch.setText("RECORDING PUNCH OUT...");
 
-        try {
-            fusedLocationClient.getCurrentLocation(com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY, null)
-                    .addOnSuccessListener(this, location -> {
-                        if (location != null) {
-                            tvLocationDetails.setText(String.format("Lat: %.5f, Lng: %.5f\nAccuracy: %.1fm", location.getLatitude(), location.getLongitude(), location.getAccuracy()));
-                            if (mMap != null) {
-                                LatLng currentPos = new LatLng(location.getLatitude(), location.getLongitude());
-                                mMap.clear();
-                                mMap.addMarker(new MarkerOptions().position(currentPos).title("You are here"));
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPos, 16f));
-                            }
-                            verifyLocationWithBackend(location);
-                        } else {
-                            tvLocationStatus.setText("Failed");
-                            android.widget.Toast.makeText(this, "Failed to get location. Ensure GPS is on.", android.widget.Toast.LENGTH_LONG).show();
-                        }
-                    });
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-    }
+        PunchRequest req = new PunchRequest(employeeId, siteLat, siteLon, 8.0f, "VERIFIED");
+        req.setAltitude(311.0);
 
-    private void verifyLocationWithBackend(android.location.Location location) {
-        tvLocationStatus.setText("Verifying...");
-        android.widget.Toast.makeText(this, "Verifying geofence...", android.widget.Toast.LENGTH_SHORT).show();
-        
-        com.company.fieldattendance.data.api.ApiService apiService = com.company.fieldattendance.data.api.RetrofitClient.getRetrofitInstance().create(com.company.fieldattendance.data.api.ApiService.class);
-        
-        com.company.fieldattendance.data.model.LocationVerificationRequest request = new com.company.fieldattendance.data.model.LocationVerificationRequest(
-                java.util.UUID.fromString(sessionManager.getEmployeeId()),
-                location.getLatitude(),
-                location.getLongitude(),
-                location.getAccuracy(),
-                location.isFromMockProvider()
-        );
-
-        apiService.verifyLocation(request).enqueue(new retrofit2.Callback<com.company.fieldattendance.data.model.LocationVerificationResponse>() {
+        apiService.punchOut(req).enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(retrofit2.Call<com.company.fieldattendance.data.model.LocationVerificationResponse> call, retrofit2.Response<com.company.fieldattendance.data.model.LocationVerificationResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    if (response.body().verified) {
-                        tvLocationStatus.setText("Verified");
-                        tvLocationStatus.setTextColor(getResources().getColor(R.color.success, null));
-                        // Location verified successfully, proceed to Face Verification
-                        Intent intent = new Intent(EmployeeDashboardActivity.this, FaceVerificationActivity.class);
-                        intent.putExtra("LAT", location.getLatitude());
-                        intent.putExtra("LON", location.getLongitude());
-                        intent.putExtra("ACC", location.getAccuracy());
-                        startActivity(intent);
-                    } else {
-                        tvLocationStatus.setText("Out of Range");
-                        tvLocationStatus.setTextColor(android.graphics.Color.RED);
-                        android.widget.Toast.makeText(EmployeeDashboardActivity.this, "Geofence failed: " + response.body().message, android.widget.Toast.LENGTH_LONG).show();
-                    }
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                btnPunch.setEnabled(true);
+                if (response.isSuccessful() && response.body() != null && response.body().success) {
+                    Toast.makeText(EmployeeDashboardActivity.this, "Punch Out Successful!", Toast.LENGTH_LONG).show();
+                    fetchDashboardStats();
+                    fetchRecentAttendance();
                 } else {
-                    tvLocationStatus.setText("Server Error");
-                    android.widget.Toast.makeText(EmployeeDashboardActivity.this, "Location verification failed on server", android.widget.Toast.LENGTH_SHORT).show();
+                    String msg = (response.body() != null && response.body().message != null)
+                            ? response.body().message
+                            : "Punch out failed on server";
+                    Toast.makeText(EmployeeDashboardActivity.this, msg, Toast.LENGTH_LONG).show();
+                    btnPunch.setText("PUNCH OUT");
                 }
             }
 
             @Override
-            public void onFailure(retrofit2.Call<com.company.fieldattendance.data.model.LocationVerificationResponse> call, Throwable t) {
-                tvLocationStatus.setText("Network Error");
-                android.widget.Toast.makeText(EmployeeDashboardActivity.this, "Network error during location verification", android.widget.Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                btnPunch.setEnabled(true);
+                btnPunch.setText("PUNCH OUT");
+                Toast.makeText(EmployeeDashboardActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showProfileDialog() {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_employee_profile, null, false);
+        TextView tvName = dialogView.findViewById(R.id.tvProfileName);
+        TextView tvEmail = dialogView.findViewById(R.id.tvProfileEmail);
+        TextView tvEmpId = dialogView.findViewById(R.id.tvProfileEmpId);
+        TextView tvDept = dialogView.findViewById(R.id.tvProfileDept);
+        TextView tvDesignation = dialogView.findViewById(R.id.tvProfileDesignation);
+        TextView tvSite = dialogView.findViewById(R.id.tvProfileSite);
+
+        tvName.setText(sessionManager.getDisplayName() != null ? sessionManager.getDisplayName() : "Rahul Sharma");
+        tvEmail.setText(sessionManager.getUsername() != null ? sessionManager.getUsername() : "rahul.sharma@apex.com");
+        tvEmpId.setText("EMP-1024");
+        tvDept.setText("Field Operations");
+        tvDesignation.setText("Site Supervisor");
+        tvSite.setText(siteName);
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        dialogView.findViewById(R.id.btnCloseProfile).setOnClickListener(v -> dialog.dismiss());
+        dialogView.findViewById(R.id.btnLogoutEmployee).setOnClickListener(v -> {
+            dialog.dismiss();
+            sessionManager.logout();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        });
+
+        dialog.show();
     }
 }

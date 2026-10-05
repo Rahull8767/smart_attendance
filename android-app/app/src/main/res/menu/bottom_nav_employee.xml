@@ -5,13 +5,13 @@
         android:icon="@android:drawable/ic_menu_today"
         android:title="Home" />
     <item
-        android:id="@+id/nav_attendance"
+        android:id="@+id/nav_punch"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="Punch In" />
+    <item
+        android:id="@+id/nav_history"
         android:icon="@android:drawable/ic_menu_recent_history"
         android:title="History" />
-    <item
-        android:id="@+id/nav_notifications"
-        android:icon="@android:drawable/ic_popup_reminder"
-        android:title="Alerts" />
     <item
         android:id="@+id/nav_profile"
         android:icon="@android:drawable/ic_menu_myplaces"

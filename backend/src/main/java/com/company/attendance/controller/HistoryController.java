@@ -15,8 +15,17 @@ public class HistoryController {
     @Autowired
     private AttendanceRepository attendanceRepository;
 
+    @Autowired
+    private com.company.attendance.repository.WorkSiteRepository workSiteRepository;
+
     @GetMapping("/{employeeId}")
     public ResponseEntity<List<AttendanceRecord>> getHistory(@PathVariable UUID employeeId) {
-        return ResponseEntity.ok(attendanceRepository.findByEmployeeIdOrderByPunchInTimeDesc(employeeId));
+        List<AttendanceRecord> records = attendanceRepository.findByEmployeeIdOrderByPunchInTimeDesc(employeeId);
+        for (AttendanceRecord r : records) {
+            if (r.getWorkSiteId() != null) {
+                workSiteRepository.findById(r.getWorkSiteId()).ifPresent(s -> r.setWorkSiteName(s.getName()));
+            }
+        }
+        return ResponseEntity.ok(records);
     }
 }

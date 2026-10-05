@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface CeoRepository extends JpaRepository<Ceo, UUID> {
     Optional<Ceo> findByUserId(UUID userId);
     List<Ceo> findByProviderId(UUID providerId);
+    Long countByProviderId(UUID providerId);
+    Long countByProviderIdAndStatus(UUID providerId, String status);
 }

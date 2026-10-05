@@ -11,4 +11,17 @@ public class LocationVerificationResponse {
     private String status;
     private String message;
     private double calculatedDistance;
+    private double allowedRadius;
+    private Double siteLatitude;
+    private Double siteLongitude;
+    private Double siteAltitude;
+    private Double altitudeDifference;
+    private String siteName;
+
+    public LocationVerificationResponse(boolean verified, String status, String message, double calculatedDistance) {
+        this.verified = verified;
+        this.status = status;
+        this.message = message;
+        this.calculatedDistance = calculatedDistance;
+    }
 }

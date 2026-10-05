@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.company.fieldattendance">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -9,6 +8,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
+        android:name=".FieldAttendanceApp"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -30,20 +30,28 @@
         </activity>
         
         <activity android:name=".ui.auth.LoginActivity" />
+        <activity android:name=".ui.auth.PresentationAccessActivity" />
         <activity android:name=".ui.employee.EmployeeDashboardActivity" />
         <activity android:name=".ui.ceo.CeoDashboardActivity" />
         
     
         <activity android:name=".ui.ceo.EmployeeManagementActivity" />
         <activity android:name=".ui.ceo.SiteManagementActivity" />
+        <activity android:name=".ui.ceo.FaceEnrollmentActivity" />
         <activity android:name=".ui.employee.FaceVerificationActivity" />
 
         <activity android:name=".ui.employee.AttendanceHistoryActivity" />
         <activity android:name=".ui.employee.CorrectionRequestActivity" />
         <activity android:name=".ui.ceo.ReportsActivity" />
-        <activity android:name=".ui.provider.ProviderDashboardActivity" />
-        <activity android:name=".ui.provider.AddEmployeeActivity" />
-        <activity android:name=".ui.provider.AddWorkSiteActivity" />
+        <activity android:name=".ui.provider.ProviderHomeActivity" />
+        <activity android:name=".ui.provider.ProviderCeoListActivity" />
+        <activity android:name=".ui.provider.ProviderCeoDetailsActivity" />
+        <activity android:name=".ui.provider.ProviderCreateCeoActivity" />
+        <activity android:name=".ui.provider.ProviderWorkforceActivity" />
+        <activity android:name=".ui.provider.ProviderAnalyticsActivity" />
+        <activity android:name=".ui.provider.ProviderAlertsActivity" />
+        <activity android:name=".ui.provider.ProviderProfileActivity" />
+        <activity android:name=".ui.provider.ProviderSettingsActivity" />
     </application>
 
 </manifest>

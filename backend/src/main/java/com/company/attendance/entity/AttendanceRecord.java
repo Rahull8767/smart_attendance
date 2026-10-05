@@ -44,6 +44,9 @@ public class AttendanceRecord {
     private Double faceSimilarityScore;
     private String failureReason;
     
+    @Transient
+    private String workSiteName;
+    
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
     

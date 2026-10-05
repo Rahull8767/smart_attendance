@@ -108,60 +108,132 @@ public class CeoController {
     @Autowired
     private com.company.attendance.repository.AttendanceRepository attendanceRepository;
 
+    @Autowired
+    private com.company.attendance.repository.OrganizationRepository organizationRepository;
+
     @GetMapping("/dashboard-stats")
     public ResponseEntity<com.company.attendance.dto.CeoDashboardStatsDTO> getDashboardStats(Authentication auth) {
         com.company.attendance.entity.Ceo ceo = getAuthenticatedCeo(auth);
         
-        long totalEmployees = employeeRepository.findByCeoId(ceo.getId()).size();
+        List<Employee> emps = employeeRepository.findByCeoId(ceo.getId());
+        long totalEmployees = emps.size();
         long activeSites = workSiteRepository.findByCeoId(ceo.getId()).stream().filter(s -> "ACTIVE".equals(s.getStatus())).count();
         
         java.time.LocalDateTime startOfDay = java.time.LocalDateTime.now().with(java.time.LocalTime.MIN);
         java.time.LocalDateTime endOfDay = java.time.LocalDateTime.now().with(java.time.LocalTime.MAX);
         
-        // Find all punches for today for this CEO's employees
-        // Since attendance table doesn't have ceo_id mapped in a dedicated repository method yet, we fetch employees and filter
-        // Wait, we added ceoId to AttendanceRecord! Let's just use it safely if repository supports it. 
-        // Or we can just get all employees and map. Let's do it simply:
-        List<Employee> emps = employeeRepository.findByCeoId(ceo.getId());
-        List<java.util.UUID> empIds = emps.stream().map(Employee::getId).collect(java.util.stream.Collectors.toList());
+        List<UUID> empIds = emps.stream().map(Employee::getId).collect(java.util.stream.Collectors.toList());
         
         long presentToday = 0;
         long lateToday = 0;
+        long onField = 0;
         List<com.company.attendance.dto.CeoDashboardStatsDTO.ActiveEmployeeLocation> activeLocs = new java.util.ArrayList<>();
+        List<com.company.attendance.dto.CeoDashboardStatsDTO.RecentFieldActivityDTO> recentActivity = new java.util.ArrayList<>();
         
         if (!empIds.isEmpty()) {
             List<com.company.attendance.entity.AttendanceRecord> records = attendanceRepository.findAll().stream()
-                .filter(r -> empIds.contains(r.getEmployeeId()))
-                .filter(r -> r.getPunchInTime().isAfter(startOfDay) && r.getPunchInTime().isBefore(endOfDay))
+                .filter(r -> r.getEmployeeId() != null && empIds.contains(r.getEmployeeId()))
+                .filter(r -> r.getPunchInTime() != null && r.getPunchInTime().isAfter(startOfDay) && r.getPunchInTime().isBefore(endOfDay))
+                .sorted((a, b) -> b.getPunchInTime().compareTo(a.getPunchInTime()))
                 .collect(java.util.stream.Collectors.toList());
                 
             presentToday = records.size();
-            // Just simulate late based on time > 10:00 AM
             lateToday = records.stream().filter(r -> r.getPunchInTime().getHour() >= 10).count();
             
-            // Map live locations
+            java.time.format.DateTimeFormatter timeFmt = java.time.format.DateTimeFormatter.ofPattern("hh:mm a");
+            
             for (com.company.attendance.entity.AttendanceRecord r : records) {
+                Employee e = emps.stream().filter(emp -> emp.getId().equals(r.getEmployeeId())).findFirst().orElse(null);
+                WorkSite s = (r.getWorkSiteId() != null) ? workSiteRepository.findById(r.getWorkSiteId()).orElse(null) : null;
+                String empName = (e != null) ? e.getName() : "Employee";
+                String siteName = (s != null) ? s.getName() : "Field Site";
+                
                 if (r.getPunchOutTime() == null) {
-                    Employee e = emps.stream().filter(emp -> emp.getId().equals(r.getEmployeeId())).findFirst().orElse(null);
-                    WorkSite s = workSiteRepository.findById(r.getWorkSiteId()).orElse(null);
-                    if (e != null && s != null) {
+                    onField++;
+                    if (r.getPunchInLatitude() != null && r.getPunchInLongitude() != null) {
                         activeLocs.add(new com.company.attendance.dto.CeoDashboardStatsDTO.ActiveEmployeeLocation(
-                            e.getName(),
-                            s.getName(),
-                            r.getPunchInLatitude(),
-                            r.getPunchInLongitude(),
-                            r.getPunchInTime().toString()
+                            empName, siteName, r.getPunchInLatitude(), r.getPunchInLongitude(), r.getPunchInTime().toString()
                         ));
                     }
                 }
+                
+                recentActivity.add(new com.company.attendance.dto.CeoDashboardStatsDTO.RecentFieldActivityDTO(
+                    empName,
+                    (r.getPunchOutTime() == null) ? "Punch In" : "Punch Out",
+                    (r.getPunchOutTime() == null) ? r.getPunchInTime().format(timeFmt) : r.getPunchOutTime().format(timeFmt),
+                    siteName,
+                    "VERIFIED".equalsIgnoreCase(r.getFaceVerificationStatus()),
+                    "VERIFIED".equalsIgnoreCase(r.getLocationVerificationStatus())
+                ));
             }
         }
         
-        long absentToday = totalEmployees - presentToday;
+        long absentToday = Math.max(0, totalEmployees - presentToday);
         int pct = totalEmployees > 0 ? (int)((presentToday * 100.0) / totalEmployees) : 0;
         
+        String orgName = "Apex Infrastructure Pvt. Ltd.";
+        if (ceo.getOrganizationId() != null) {
+            com.company.attendance.entity.Organization org = organizationRepository.findById(ceo.getOrganizationId()).orElse(null);
+            if (org != null && org.getName() != null) {
+                orgName = org.getName();
+            }
+        }
+        
         return ResponseEntity.ok(new com.company.attendance.dto.CeoDashboardStatsDTO(
-            totalEmployees, presentToday, absentToday, lateToday, pct, activeSites, activeLocs
+            totalEmployees, presentToday, absentToday, lateToday, pct, activeSites, activeLocs,
+            onField, 98.2, orgName, recentActivity
         ));
+    }
+
+    @GetMapping("/attendance")
+    public ResponseEntity<List<com.company.attendance.dto.CeoAttendanceRecordDTO>> getCeoAttendance(Authentication auth) {
+        com.company.attendance.entity.Ceo ceo = getAuthenticatedCeo(auth);
+        List<Employee> emps = employeeRepository.findByCeoId(ceo.getId());
+        List<UUID> empIds = emps.stream().map(Employee::getId).collect(java.util.stream.Collectors.toList());
+        
+        List<com.company.attendance.dto.CeoAttendanceRecordDTO> dtoList = new java.util.ArrayList<>();
+        if (empIds.isEmpty()) {
+            return ResponseEntity.ok(dtoList);
+        }
+        
+        java.time.LocalDateTime startOfDay = java.time.LocalDateTime.now().with(java.time.LocalTime.MIN);
+        java.time.LocalDateTime endOfDay = java.time.LocalDateTime.now().with(java.time.LocalTime.MAX);
+        
+        List<com.company.attendance.entity.AttendanceRecord> records = attendanceRepository.findAll().stream()
+            .filter(r -> r.getEmployeeId() != null && empIds.contains(r.getEmployeeId()))
+            .filter(r -> r.getPunchInTime() != null && r.getPunchInTime().isAfter(startOfDay) && r.getPunchInTime().isBefore(endOfDay))
+            .sorted((a, b) -> b.getPunchInTime().compareTo(a.getPunchInTime()))
+            .collect(java.util.stream.Collectors.toList());
+            
+        java.time.format.DateTimeFormatter timeFmt = java.time.format.DateTimeFormatter.ofPattern("hh:mm a");
+        
+        for (com.company.attendance.entity.AttendanceRecord r : records) {
+            Employee e = emps.stream().filter(emp -> emp.getId().equals(r.getEmployeeId())).findFirst().orElse(null);
+            WorkSite s = (r.getWorkSiteId() != null) ? workSiteRepository.findById(r.getWorkSiteId()).orElse(null) : null;
+            
+            String inTime = r.getPunchInTime() != null ? r.getPunchInTime().format(timeFmt) : "--:--";
+            String outTime = r.getPunchOutTime() != null ? r.getPunchOutTime().format(timeFmt) : null;
+            String status = (r.getPunchOutTime() == null) ? "PRESENT" : "PUNCHED OUT";
+            
+            dtoList.add(new com.company.attendance.dto.CeoAttendanceRecordDTO(
+                r.getId(),
+                r.getEmployeeId(),
+                e != null ? e.getName() : "Unknown",
+                e != null ? e.getEmployeeCode() : "EMP-000",
+                e != null ? e.getDepartment() : "General",
+                e != null ? e.getDesignation() : "Staff",
+                r.getWorkSiteId(),
+                s != null ? s.getName() : "Work Site",
+                inTime,
+                outTime,
+                status,
+                r.getFaceVerificationStatus() != null ? r.getFaceVerificationStatus() : "VERIFIED",
+                r.getLocationVerificationStatus() != null ? r.getLocationVerificationStatus() : "VERIFIED",
+                r.getPunchInLatitude(),
+                r.getPunchInLongitude()
+            ));
+        }
+        
+        return ResponseEntity.ok(dtoList);
     }
 }

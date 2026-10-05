@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface WorkSiteRepository extends JpaRepository<WorkSite, UUID> {
     List<WorkSite> findByProviderId(UUID providerId);
     List<WorkSite> findByCeoId(UUID ceoId);
+    Long countByProviderId(UUID providerId);
 }

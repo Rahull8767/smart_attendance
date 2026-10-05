@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground">
+    android:background="#F8FAFC">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -25,245 +25,459 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="24dp">
-                
+                android:layout_marginBottom="20dp">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/tvGreeting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="Good morning, User 👋"
-                        android:textSize="24sp"
+                        android:text="Good morning, Rahul"
+                        android:textSize="22sp"
                         android:textStyle="bold"
-                        android:textColor="?android:textColorPrimary" />
+                        android:textColor="#0F172A" />
+
                     <TextView
                         android:id="@+id/tvEmployeeMeta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        tools:text="Employee  •  EMP-000"
-                        android:textSize="14sp"
-                        android:textColor="?android:textColorSecondary" />
+                        android:layout_marginTop="2dp"
+                        android:text="EMP-1024 • Apex Infrastructure Pvt. Ltd."
+                        android:textSize="13sp"
+                        android:textColor="#64748B" />
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/ivAvatar"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@android:drawable/ic_menu_myplaces"
-                    android:background="@drawable/avatar_bg"
-                    android:padding="10dp"
-                    app:tint="?attr/colorPrimary" />
+                <FrameLayout
+                    android:id="@+id/btnProfileAvatar"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/circle_blue_light">
+                    <TextView
+                        android:id="@+id/tvAvatarInitial"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="R"
+                        android:textColor="#2563EB"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
             </LinearLayout>
 
-            <!-- Main Attendance Card -->
+            <!-- Main Today's Attendance Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="?attr/colorSurfaceVariant">
+                app:cardCornerRadius="16dp"
+                app:strokeColor="#E2E8F0"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="#FFFFFF">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="24dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TODAY'S ATTENDANCE"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="?android:textColorHint"
-                        android:letterSpacing="0.05" />
-
-                    <TextView
-                        android:id="@+id/tvPunchStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        tools:text="NOT PUNCHED IN"
-                        android:textSize="26sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="-0.02"
-                        android:textColor="?android:textColorPrimary" />
-                        
-                    <TextView
-                        android:id="@+id/tvWorkingDuration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        tools:text="0h 0m"
-                        android:textSize="16sp"
-                        android:textColor="?attr/colorPrimary"
-                        android:visibility="gone"/>
+                    android:padding="20dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="20dp">
-                        
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TODAY'S STATUS"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#64748B"
+                            android:letterSpacing="0.06" />
+
+                        <TextView
+                            android:id="@+id/tvStatusBadge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/circle_blue_light"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:text="NOT STARTED"
+                            android:textColor="#64748B"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvPunchStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="NOT PUNCHED IN"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="#0F172A" />
+
+                    <TextView
+                        android:id="@+id/tvPunchTimeSubtext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Punch in to mark your presence"
+                        android:textSize="13sp"
+                        android:textColor="#64748B" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#F1F5F9"
+                        android:layout_marginVertical="16dp" />
+
+                    <!-- Assigned Site Information -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Assigned Site"
-                                android:textSize="12sp"
-                                android:textColor="?android:textColorHint" />
+                                android:text="Assigned Work Site"
+                                android:textSize="11sp"
+                                android:textColor="#64748B" />
+
                             <TextView
                                 android:id="@+id/tvAssignedSite"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                tools:text="Loading..."
-                                android:textSize="16sp"
+                                android:text="Apex Tower Construction Site"
+                                android:textSize="14sp"
                                 android:textStyle="bold"
-                                android:textColor="?android:textColorPrimary" />
+                                android:textColor="#0F172A" />
+
+                            <TextView
+                                android:id="@+id/tvSiteAddress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:text="Nagpur, Maharashtra, India"
+                                android:textSize="12sp"
+                                android:textColor="#64748B" />
                         </LinearLayout>
-                        
+
                         <LinearLayout
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:gravity="end">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Punch In Time"
-                                android:textSize="12sp"
-                                android:textColor="?android:textColorHint" />
+                                android:textSize="11sp"
+                                android:textColor="#64748B" />
+
                             <TextView
                                 android:id="@+id/tvPunchInTime"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                tools:text="--:--"
-                                android:textSize="16sp"
+                                android:text="--:--"
+                                android:textSize="14sp"
                                 android:textStyle="bold"
-                                android:textColor="?android:textColorPrimary" />
+                                android:textColor="#0F172A" />
+
+                            <TextView
+                                android:id="@+id/tvWorkingDuration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="1dp"
+                                android:text="0h 00m"
+                                android:textSize="12sp"
+                                android:textColor="#2563EB"
+                                android:visibility="gone" />
                         </LinearLayout>
                     </LinearLayout>
 
+                    <!-- Primary Action Button -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnPunch"
                         android:layout_width="match_parent"
-                        android:layout_height="64dp"
-                        android:layout_marginTop="24dp"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="20dp"
                         android:text="PUNCH IN"
-                        android:textSize="18sp" />
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="12dp"
+                        android:backgroundTint="#2563EB" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Verification Status Grid -->
+            <!-- 3 Pill Checklist Cards: Face, Work Site, Location -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="16dp"
-                android:baselineAligned="false">
-                
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    app:cardBackgroundColor="?attr/colorSurface">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="LOCATION"
-                            android:textSize="10sp"
-                            android:textColor="?android:textColorHint"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:id="@+id/tvLocationStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            tools:text="Acquiring..."
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/warning"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                android:layout_marginTop="16dp">
 
+                <!-- Face -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="?attr/colorSurface">
+                    android:layout_marginEnd="6dp"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#FFFFFF">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:padding="12dp">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="FACE"
-                            android:textSize="10sp"
-                            android:textColor="?android:textColorHint"
-                            android:textStyle="bold"/>
+                            android:text="Face"
+                            android:textSize="11sp"
+                            android:textColor="#64748B" />
                         <TextView
                             android:id="@+id/tvFaceStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            tools:text="Checking..."
-                            android:textSize="14sp"
+                            android:layout_marginTop="2dp"
+                            android:text="Enrolled ✓"
+                            android:textSize="13sp"
                             android:textStyle="bold"
-                            android:textColor="@color/warning"/>
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Work Site -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="3dp"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#FFFFFF">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Work Site"
+                            android:textSize="11sp"
+                            android:textColor="#64748B" />
+                        <TextView
+                            android:id="@+id/tvSiteStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Assigned ✓"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#16A34A" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Location -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#E2E8F0"
+                    app:strokeWidth="1dp"
+                    app:cardBackgroundColor="#FFFFFF">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Location"
+                            android:textSize="11sp"
+                            android:textColor="#64748B" />
+                        <TextView
+                            android:id="@+id/tvLocationStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Ready"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#2563EB" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-            <!-- Map View Placeholder / Fragment container -->
+            <!-- Map View Container -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="LIVE LOCATION"
-                android:textSize="12sp"
+                android:text="ASSIGNED GEOFENCE"
+                android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="?android:textColorHint"
+                android:textColor="#64748B"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="8dp"
                 android:letterSpacing="0.05" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:cardBackgroundColor="?attr/colorSurface"
-                app:cardCornerRadius="16dp">
-                
+                android:layout_height="180dp"
+                app:cardCornerRadius="14dp"
+                app:strokeColor="#E2E8F0"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="#FFFFFF">
+
                 <fragment
                     android:id="@+id/map"
                     android:name="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </com.google.android.material.card.MaterialCardView>
-            
-            <TextView
-                android:id="@+id/tvLocationDetails"
+
+            <!-- Recent Attendance Section -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                tools:text="Lat: 0.0, Lng: 0.0\nAccuracy: --"
-                android:textSize="12sp"
-                android:textColor="?android:textColorSecondary"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="RECENT ATTENDANCE"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#64748B"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:id="@+id/btnViewFullHistory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="View History →"
+                    android:textColor="#2563EB"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Recent Record Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardRecentRecord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="12dp"
+                app:strokeColor="#E2E8F0"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvRecentDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Today"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                            android:textColor="#0F172A" />
+
+                        <TextView
+                            android:id="@+id/tvRecentStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/circle_blue_light"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="2dp"
+                            android:text="NO RECORD"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:textColor="#64748B" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvRecentSite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Apex Tower Construction Site"
+                        android:textSize="13sp"
+                        android:textColor="#64748B" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvRecentPunchIn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="In: --:--"
+                            android:textSize="12sp"
+                            android:textColor="#0F172A" />
+
+                        <TextView
+                            android:id="@+id/tvRecentPunchOut"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Out: --:--"
+                            android:textSize="12sp"
+                            android:textColor="#0F172A" />
+
+                        <TextView
+                            android:id="@+id/tvRecentVerification"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Face ✓ • Loc ✓"
+                            android:textSize="11sp"
+                            android:textColor="#16A34A"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
     </ScrollView>
@@ -273,6 +487,10 @@
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:elevation="8dp"
+        app:itemIconTint="@color/nav_item_color"
+        app:itemTextColor="@color/nav_item_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_employee" />
 

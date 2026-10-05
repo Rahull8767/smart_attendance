@@ -49,6 +49,21 @@
     <color name="info">#5B7CFA</color>
     <color name="info_bg">#1D264A</color>
 
+    <!-- Provider Colors -->
+    <color name="provider_background">#07111F</color>
+    <color name="provider_surface">#0D1828</color>
+    <color name="provider_surface_secondary">#122238</color>
+    <color name="provider_surface_elevated">#172A42</color>
+    <color name="provider_primary">#19C3B1</color>
+    <color name="provider_secondary">#5B7CFA</color>
+    <color name="provider_success">#22C55E</color>
+    <color name="provider_warning">#F59E0B</color>
+    <color name="provider_error">#EF4444</color>
+    <color name="provider_text_primary">#F8FAFC</color>
+    <color name="provider_text_secondary">#94A3B8</color>
+    <color name="provider_text_muted">#64748B</color>
+    <color name="provider_border">#26364A</color>
+
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>

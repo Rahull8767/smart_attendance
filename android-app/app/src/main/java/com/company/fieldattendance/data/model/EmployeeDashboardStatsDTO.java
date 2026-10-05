@@ -9,4 +9,13 @@ public class EmployeeDashboardStatsDTO {
     public Double siteLongitude;
     public Integer geofenceRadius;
     public String workingDuration;
+    public String siteAddress;
+    public Double siteAltitude;
+    public String employeeCode;
+    public String employeeName;
+    public String department;
+    public String designation;
+    public boolean isFaceEnrolled;
+    public boolean faceEnrolled;
+    public String assignedSiteId;
 }

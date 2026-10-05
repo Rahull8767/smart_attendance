@@ -60,11 +60,28 @@ public class AttendanceController {
 
         double distance = GeoUtils.calculateDistance(request.getLatitude(), request.getLongitude(), site.getLatitude(), site.getLongitude());
         int radius = site.getGeofenceRadius() != null ? site.getGeofenceRadius() : 100;
+        Double siteAlt = site.getAltitude() != null ? site.getAltitude() : 312.0;
+        Double altDiff = (request.getAltitude() != null) ? Math.abs(request.getAltitude() - siteAlt) : 0.0;
+
+        LocationVerificationResponse response = new LocationVerificationResponse();
+        response.setCalculatedDistance(Math.round(distance * 10.0) / 10.0);
+        response.setAllowedRadius(radius);
+        response.setSiteLatitude(site.getLatitude());
+        response.setSiteLongitude(site.getLongitude());
+        response.setSiteAltitude(siteAlt);
+        response.setAltitudeDifference(Math.round(altDiff * 10.0) / 10.0);
+        response.setSiteName(site.getName());
 
         if (distance <= radius) {
-            return ResponseEntity.ok(new LocationVerificationResponse(true, "VERIFIED", "Location verified successfully", distance));
+            response.setVerified(true);
+            response.setStatus("VERIFIED");
+            response.setMessage("Location verified successfully");
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.ok(new LocationVerificationResponse(false, "OUTSIDE_GEOFENCE", "You are " + (int)distance + " meters away from the site", distance));
+            response.setVerified(false);
+            response.setStatus("OUTSIDE_GEOFENCE");
+            response.setMessage("You are " + (int)distance + " meters away from the site. Allowed: " + radius + "m");
+            return ResponseEntity.ok(response);
         }
     }
     
@@ -109,6 +126,7 @@ public class AttendanceController {
         record.setPunchInTime(LocalDateTime.now());
         record.setPunchInLatitude(request.getLatitude());
         record.setPunchInLongitude(request.getLongitude());
+        record.setPunchInAltitude(request.getAltitude());
         record.setPunchInAccuracy(request.getAccuracy());
         record.setPunchInLocationTimestamp(LocalDateTime.now());
         record.setFaceVerificationStatus("VERIFIED");
@@ -139,6 +157,7 @@ public class AttendanceController {
         record.setPunchOutTime(LocalDateTime.now());
         record.setPunchOutLatitude(request.getLatitude());
         record.setPunchOutLongitude(request.getLongitude());
+        record.setPunchOutAltitude(request.getAltitude());
         record.setPunchOutAccuracy(request.getAccuracy());
         record.setPunchOutLocationTimestamp(LocalDateTime.now());
         

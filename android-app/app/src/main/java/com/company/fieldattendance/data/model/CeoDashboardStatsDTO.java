@@ -10,6 +10,10 @@ public class CeoDashboardStatsDTO {
     public int attendancePercentage;
     public long activeSites;
     public List<ActiveEmployeeLocation> activeLocations;
+    public long onField;
+    public double verificationRate;
+    public String companyName;
+    public List<RecentFieldActivityDTO> recentActivity;
     
     public static class ActiveEmployeeLocation {
         public String employeeName;
@@ -17,5 +21,14 @@ public class CeoDashboardStatsDTO {
         public Double latitude;
         public Double longitude;
         public String punchInTime;
+    }
+
+    public static class RecentFieldActivityDTO {
+        public String employeeName;
+        public String action;
+        public String time;
+        public String siteName;
+        public boolean faceVerified;
+        public boolean locationVerified;
     }
 }

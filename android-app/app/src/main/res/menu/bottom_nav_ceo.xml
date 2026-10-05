@@ -3,11 +3,11 @@
     <item
         android:id="@+id/nav_dashboard"
         android:icon="@android:drawable/ic_menu_today"
-        android:title="Dashboard" />
+        android:title="Home" />
     <item
         android:id="@+id/nav_people"
         android:icon="@android:drawable/ic_menu_myplaces"
-        android:title="People" />
+        android:title="Employees" />
     <item
         android:id="@+id/nav_sites"
         android:icon="@android:drawable/ic_dialog_map"
@@ -18,6 +18,6 @@
         android:title="Attendance" />
     <item
         android:id="@+id/nav_more"
-        android:icon="@android:drawable/ic_menu_more"
-        android:title="More" />
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Profile" />
 </menu>
