@@ -27,4 +27,28 @@ public class ProviderController {
         User providerUser = userRepository.findByEmail(email).orElseThrow();
         return ResponseEntity.ok(employeeRepository.findByProviderId(providerUser.getProviderId()));
     }
+
+    @Autowired
+    private com.company.attendance.repository.CeoRepository ceoRepository;
+    
+    @Autowired
+    private com.company.attendance.repository.WorkSiteRepository workSiteRepository;
+
+    @GetMapping("/dashboard-stats")
+    public ResponseEntity<com.company.attendance.dto.ProviderDashboardStatsDTO> getDashboardStats(Authentication authentication) {
+        String email = authentication.getName();
+        User providerUser = userRepository.findByEmail(email).orElse(null);
+        if (providerUser == null) return ResponseEntity.badRequest().build();
+        
+        java.util.UUID providerId = providerUser.getProviderId();
+        
+        long totalCeos = ceoRepository.findByProviderId(providerId).size();
+        long activeCeos = ceoRepository.findByProviderId(providerId).stream().filter(c -> "ACTIVE".equals(c.getStatus())).count();
+        long totalEmployees = employeeRepository.findByProviderId(providerId).size();
+        long totalSites = workSiteRepository.findByProviderId(providerId).size();
+        
+        return ResponseEntity.ok(new com.company.attendance.dto.ProviderDashboardStatsDTO(
+            totalCeos, activeCeos, totalEmployees, totalSites
+        ));
+    }
 }

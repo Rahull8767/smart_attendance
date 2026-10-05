@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.company.attendance.repository.CeoRepository;
+import org.springframework.security.core.Authentication;
+
 @RestController
 @RequestMapping("/api/ceo")
 public class CeoController {
@@ -32,32 +35,32 @@ public class CeoController {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private CeoRepository ceoRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    // --- Provider Management ---
-
-    @GetMapping("/providers")
-    public ResponseEntity<List<Provider>> getAllProviders() {
-        return ResponseEntity.ok(providerRepository.findAll());
-    }
-
-    @PostMapping("/providers")
-    public ResponseEntity<Provider> createProvider(@RequestBody Provider provider) {
-        provider.setStatus("ACTIVE");
-        return ResponseEntity.ok(providerRepository.save(provider));
+    
+    private com.company.attendance.entity.Ceo getAuthenticatedCeo(Authentication auth) {
+        String email = auth.getName();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        return ceoRepository.findByUserId(user.getId()).orElseThrow(() -> new RuntimeException("CEO profile not found"));
     }
 
     // --- Work Site Management ---
 
     @GetMapping("/sites")
-    public ResponseEntity<List<WorkSite>> getAllWorkSites() {
-        return ResponseEntity.ok(workSiteRepository.findAll());
+    public ResponseEntity<List<WorkSite>> getAllWorkSites(Authentication auth) {
+        com.company.attendance.entity.Ceo ceo = getAuthenticatedCeo(auth);
+        return ResponseEntity.ok(workSiteRepository.findByCeoId(ceo.getId()));
     }
 
     @PostMapping("/sites")
-    public ResponseEntity<WorkSite> createWorkSite(@RequestBody WorkSite workSite) {
+    public ResponseEntity<WorkSite> createWorkSite(@RequestBody WorkSite workSite, Authentication auth) {
+        com.company.attendance.entity.Ceo ceo = getAuthenticatedCeo(auth);
+        workSite.setProviderId(ceo.getProviderId());
+        workSite.setCeoId(ceo.getId());
         workSite.setStatus("ACTIVE");
         return ResponseEntity.ok(workSiteRepository.save(workSite));
     }
@@ -65,15 +68,18 @@ public class CeoController {
     // --- Employee Management ---
 
     @GetMapping("/employees")
-    public ResponseEntity<List<Employee>> getAllEmployees() {
-        return ResponseEntity.ok(employeeRepository.findAll());
+    public ResponseEntity<List<Employee>> getAllEmployees(Authentication auth) {
+        com.company.attendance.entity.Ceo ceo = getAuthenticatedCeo(auth);
+        return ResponseEntity.ok(employeeRepository.findByCeoId(ceo.getId()));
     }
 
     @PostMapping("/employees")
-    public ResponseEntity<?> createEmployee(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> createEmployee(@RequestBody Map<String, String> request, Authentication auth) {
         try {
-            UUID providerId = UUID.fromString(request.get("providerId"));
-            UUID siteId = request.containsKey("siteId") ? UUID.fromString(request.get("siteId")) : null;
+            com.company.attendance.entity.Ceo ceo = getAuthenticatedCeo(auth);
+            UUID providerId = ceo.getProviderId();
+            UUID siteId = (request.containsKey("siteId") && request.get("siteId") != null && !request.get("siteId").isEmpty()) 
+                ? UUID.fromString(request.get("siteId")) : null;
 
             User user = new User();
             user.setProviderId(providerId);
@@ -85,6 +91,7 @@ public class CeoController {
             Employee emp = new Employee();
             emp.setUserId(user.getId());
             emp.setProviderId(providerId);
+            emp.setCeoId(ceo.getId());
             emp.setAssignedSiteId(siteId);
             emp.setEmployeeCode(request.get("employeeCode"));
             emp.setName(request.get("name"));
@@ -96,5 +103,65 @@ public class CeoController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
+    }
+
+    @Autowired
+    private com.company.attendance.repository.AttendanceRepository attendanceRepository;
+
+    @GetMapping("/dashboard-stats")
+    public ResponseEntity<com.company.attendance.dto.CeoDashboardStatsDTO> getDashboardStats(Authentication auth) {
+        com.company.attendance.entity.Ceo ceo = getAuthenticatedCeo(auth);
+        
+        long totalEmployees = employeeRepository.findByCeoId(ceo.getId()).size();
+        long activeSites = workSiteRepository.findByCeoId(ceo.getId()).stream().filter(s -> "ACTIVE".equals(s.getStatus())).count();
+        
+        java.time.LocalDateTime startOfDay = java.time.LocalDateTime.now().with(java.time.LocalTime.MIN);
+        java.time.LocalDateTime endOfDay = java.time.LocalDateTime.now().with(java.time.LocalTime.MAX);
+        
+        // Find all punches for today for this CEO's employees
+        // Since attendance table doesn't have ceo_id mapped in a dedicated repository method yet, we fetch employees and filter
+        // Wait, we added ceoId to AttendanceRecord! Let's just use it safely if repository supports it. 
+        // Or we can just get all employees and map. Let's do it simply:
+        List<Employee> emps = employeeRepository.findByCeoId(ceo.getId());
+        List<java.util.UUID> empIds = emps.stream().map(Employee::getId).collect(java.util.stream.Collectors.toList());
+        
+        long presentToday = 0;
+        long lateToday = 0;
+        List<com.company.attendance.dto.CeoDashboardStatsDTO.ActiveEmployeeLocation> activeLocs = new java.util.ArrayList<>();
+        
+        if (!empIds.isEmpty()) {
+            List<com.company.attendance.entity.AttendanceRecord> records = attendanceRepository.findAll().stream()
+                .filter(r -> empIds.contains(r.getEmployeeId()))
+                .filter(r -> r.getPunchInTime().isAfter(startOfDay) && r.getPunchInTime().isBefore(endOfDay))
+                .collect(java.util.stream.Collectors.toList());
+                
+            presentToday = records.size();
+            // Just simulate late based on time > 10:00 AM
+            lateToday = records.stream().filter(r -> r.getPunchInTime().getHour() >= 10).count();
+            
+            // Map live locations
+            for (com.company.attendance.entity.AttendanceRecord r : records) {
+                if (r.getPunchOutTime() == null) {
+                    Employee e = emps.stream().filter(emp -> emp.getId().equals(r.getEmployeeId())).findFirst().orElse(null);
+                    WorkSite s = workSiteRepository.findById(r.getWorkSiteId()).orElse(null);
+                    if (e != null && s != null) {
+                        activeLocs.add(new com.company.attendance.dto.CeoDashboardStatsDTO.ActiveEmployeeLocation(
+                            e.getName(),
+                            s.getName(),
+                            r.getPunchInLatitude(),
+                            r.getPunchInLongitude(),
+                            r.getPunchInTime().toString()
+                        ));
+                    }
+                }
+            }
+        }
+        
+        long absentToday = totalEmployees - presentToday;
+        int pct = totalEmployees > 0 ? (int)((presentToday * 100.0) / totalEmployees) : 0;
+        
+        return ResponseEntity.ok(new com.company.attendance.dto.CeoDashboardStatsDTO(
+            totalEmployees, presentToday, absentToday, lateToday, pct, activeSites, activeLocs
+        ));
     }
 }

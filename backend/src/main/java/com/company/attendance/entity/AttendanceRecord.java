@@ -17,6 +17,7 @@ public class AttendanceRecord {
     private UUID employeeId;
     private UUID workSiteId;
     private UUID providerId; // Keep provider ID just in case
+    private UUID ceoId;
     
     private LocalDateTime punchInTime;
     private LocalDateTime punchOutTime;
@@ -37,6 +38,11 @@ public class AttendanceRecord {
     private String locationVerificationStatus; // "VERIFIED", "OUTSIDE_GEOFENCE"
     
     private LocalDateTime verificationTimestamp;
+    
+    private Double distanceFromSite;
+    private Double altitudeDifference;
+    private Double faceSimilarityScore;
+    private String failureReason;
     
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

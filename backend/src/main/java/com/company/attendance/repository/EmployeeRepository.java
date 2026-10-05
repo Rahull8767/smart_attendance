@@ -7,5 +7,6 @@ import java.util.UUID;
 
 public interface EmployeeRepository extends JpaRepository<Employee, UUID> {
     List<Employee> findByProviderId(UUID providerId);
+    List<Employee> findByCeoId(UUID ceoId);
     Employee findByUserId(UUID userId);
 }

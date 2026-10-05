@@ -28,19 +28,12 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private com.company.attendance.repository.CeoRepository ceoRepository;
+
     @Override
     public void run(String... args) throws Exception {
-        // 1. Create CEO
-        if (userRepository.findByEmail("ceo@test.com").isEmpty()) {
-            User ceo = new User();
-            ceo.setRole("ROLE_CEO");
-            ceo.setEmail("ceo@test.com");
-            ceo.setPasswordHash(passwordEncoder.encode("ChangeMe123!"));
-            userRepository.save(ceo);
-            System.out.println("Test CEO created: ceo@test.com");
-        }
-
-        // 2. Create Provider
+        // 1. Create Provider
         Provider provider = null;
         if (providerRepository.findAll().isEmpty()) {
             provider = new Provider();
@@ -64,6 +57,31 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Test Provider created: provider@test.com");
         }
 
+        // 2. Create CEO
+        com.company.attendance.entity.Ceo ceoEntity = null;
+        if (userRepository.findByEmail("ceo@test.com").isEmpty()) {
+            User ceo = new User();
+            ceo.setRole("ROLE_CEO");
+            ceo.setEmail("ceo@test.com");
+            ceo.setPasswordHash(passwordEncoder.encode("ChangeMe123!"));
+            ceo.setProviderId(provider.getId());
+            ceo = userRepository.save(ceo);
+            
+            ceoEntity = new com.company.attendance.entity.Ceo();
+            ceoEntity.setUserId(ceo.getId());
+            ceoEntity.setProviderId(provider.getId());
+            ceoEntity.setName("Alice CEO");
+            ceoEntity.setEmail("ceo@test.com");
+            ceoEntity.setPhone("555-0200");
+            ceoEntity.setDesignation("Chief Executive Officer");
+            ceoEntity.setStatus("ACTIVE");
+            ceoEntity = ceoRepository.save(ceoEntity);
+            System.out.println("Test CEO created: ceo@test.com");
+        } else {
+            User ceoUser = userRepository.findByEmail("ceo@test.com").get();
+            ceoEntity = ceoRepository.findByUserId(ceoUser.getId()).orElse(null);
+        }
+
         // 3. Create Employee
         if (userRepository.findByEmail("employee@test.com").isEmpty()) {
             User empUser = new User();
@@ -76,9 +94,13 @@ public class DataInitializer implements CommandLineRunner {
             Employee emp = new Employee();
             emp.setUserId(empUser.getId());
             emp.setProviderId(provider.getId());
+            if (ceoEntity != null) {
+                emp.setCeoId(ceoEntity.getId());
+            }
             emp.setEmployeeCode("EMP001");
             emp.setName("Jane Doe");
             emp.setDepartment("Field Operations");
+            emp.setDesignation("Field Agent");
             emp.setStatus("ACTIVE");
             employeeRepository.save(emp);
             System.out.println("Test Employee created: employee@test.com");

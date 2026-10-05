@@ -12,5 +12,7 @@ public class AuthResponse {
     private java.util.UUID userId;
     private String role;
     private java.util.UUID providerId;
+    private java.util.UUID ceoId;
     private java.util.UUID employeeId;
+    private String displayName;
 }

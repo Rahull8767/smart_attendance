@@ -31,6 +31,12 @@ public class AuthController {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private com.company.attendance.repository.CeoRepository ceoRepository;
+
+    @Autowired
+    private com.company.attendance.repository.ProviderRepository providerRepository;
+
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthRequest authRequest) throws Exception {
         Authentication authentication = authenticationManager.authenticate(
@@ -44,10 +50,32 @@ public class AuthController {
         
         User dbUser = userRepository.findByEmail(authRequest.getEmail()).orElseThrow();
         java.util.UUID providerId = dbUser.getProviderId();
+        java.util.UUID ceoId = null;
+        java.util.UUID employeeId = null;
+        String displayName = dbUser.getEmail();
         
-        Employee emp = employeeRepository.findByUserId(dbUser.getId());
-        java.util.UUID employeeId = emp != null ? emp.getId() : null;
+        if ("ROLE_CEO".equals(role)) {
+            com.company.attendance.entity.Ceo ceo = ceoRepository.findByUserId(dbUser.getId()).orElse(null);
+            if (ceo != null) {
+                ceoId = ceo.getId();
+                displayName = ceo.getName();
+                providerId = ceo.getProviderId();
+            }
+        } else if ("ROLE_EMPLOYEE".equals(role)) {
+            Employee emp = employeeRepository.findByUserId(dbUser.getId());
+            if (emp != null) {
+                employeeId = emp.getId();
+                ceoId = emp.getCeoId();
+                providerId = emp.getProviderId();
+                displayName = emp.getName();
+            }
+        } else if ("ROLE_PROVIDER".equals(role)) {
+            com.company.attendance.entity.Provider provider = providerRepository.findById(providerId).orElse(null);
+            if (provider != null) {
+                displayName = provider.getCompanyName();
+            }
+        }
         
-        return ResponseEntity.ok(new AuthResponse(jwt, dbUser.getId(), role, providerId, employeeId));
+        return ResponseEntity.ok(new AuthResponse(jwt, dbUser.getId(), role, providerId, ceoId, employeeId, displayName));
     }
 }

@@ -15,6 +15,11 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.FieldAttendance">
         
+        <!-- Google Maps API Key (Provide actual key in local.properties or strings in production) -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="YOUR_GOOGLE_MAPS_API_KEY_HERE" />
+        
         <activity
             android:name=".ui.common.SplashActivity"
             android:exported="true">

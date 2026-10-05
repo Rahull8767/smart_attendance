@@ -14,6 +14,7 @@ public class Employee {
     
     private UUID userId;
     private UUID providerId;
+    private UUID ceoId;
     private String employeeCode;
     private String name;
     private String department;

@@ -58,7 +58,14 @@ public class LoginActivity extends AppCompatActivity {
                     progressBar.setVisibility(View.GONE);
                     btnLogin.setEnabled(true);
                     if (resource.data != null) {
-                        sessionManager.saveSession(resource.data.getAccessToken(), resource.data.getRole(), resource.data.getEmployeeId());
+                        sessionManager.saveSession(
+                            resource.data.getAccessToken(),
+                            resource.data.getRole(),
+                            resource.data.getEmployeeId(),
+                            resource.data.getCeoId(),
+                            resource.data.getProviderId(),
+                            resource.data.getDisplayName()
+                        );
                         navigateToRoleDashboard(resource.data.getRole());
                     }
                     break;

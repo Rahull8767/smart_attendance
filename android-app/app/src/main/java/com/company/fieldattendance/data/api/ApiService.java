@@ -22,4 +22,13 @@ public interface ApiService {
 
     @POST("/api/attendance/verify-location")
     Call<com.company.fieldattendance.data.model.LocationVerificationResponse> verifyLocation(@Body com.company.fieldattendance.data.model.LocationVerificationRequest request);
+
+    @retrofit2.http.GET("/api/ceo/dashboard-stats")
+    Call<com.company.fieldattendance.data.model.CeoDashboardStatsDTO> getCeoDashboardStats();
+
+    @retrofit2.http.GET("/api/employees/dashboard-stats")
+    Call<com.company.fieldattendance.data.model.EmployeeDashboardStatsDTO> getEmployeeDashboardStats();
+
+    @retrofit2.http.GET("/api/provider/dashboard-stats")
+    Call<com.company.fieldattendance.data.model.ProviderDashboardStatsDTO> getProviderDashboardStats();
 }

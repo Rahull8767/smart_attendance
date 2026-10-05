@@ -7,21 +7,18 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "work_sites")
-public class WorkSite {
+@Table(name = "ceos")
+public class Ceo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     
+    private UUID userId;
     private UUID providerId;
-    private UUID ceoId;
     private String name;
-    private String address;
-    private Double latitude;
-    private Double longitude;
-    private Double altitude;
-    private Integer geofenceRadius;
-    private Double altitudeTolerance;
+    private String email;
+    private String phone;
+    private String designation;
     private String status;
     
     @Column(name = "created_at", updatable = false)

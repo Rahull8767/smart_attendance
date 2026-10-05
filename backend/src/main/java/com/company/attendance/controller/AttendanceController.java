@@ -104,6 +104,7 @@ public class AttendanceController {
         AttendanceRecord record = new AttendanceRecord();
         record.setEmployeeId(employee.getId());
         record.setProviderId(employee.getProviderId());
+        record.setCeoId(employee.getCeoId());
         record.setWorkSiteId(employee.getAssignedSiteId());
         record.setPunchInTime(LocalDateTime.now());
         record.setPunchInLatitude(request.getLatitude());

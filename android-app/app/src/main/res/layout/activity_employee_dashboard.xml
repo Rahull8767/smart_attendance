@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:colorBackground">
@@ -32,22 +33,25 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
                     <TextView
+                        android:id="@+id/tvGreeting"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Good morning, Rahul 👋"
+                        tools:text="Good morning, User 👋"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         android:textColor="?android:textColorPrimary" />
                     <TextView
+                        android:id="@+id/tvEmployeeMeta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Employee  •  EMP-001"
+                        tools:text="Employee  •  EMP-000"
                         android:textSize="14sp"
                         android:textColor="?android:textColorSecondary" />
                 </LinearLayout>
 
                 <ImageView
+                    android:id="@+id/ivAvatar"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@android:drawable/ic_menu_myplaces"
@@ -82,11 +86,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="NOT PUNCHED IN"
+                        tools:text="NOT PUNCHED IN"
                         android:textSize="26sp"
                         android:textStyle="bold"
                         android:letterSpacing="-0.02"
                         android:textColor="?android:textColorPrimary" />
+                        
+                    <TextView
+                        android:id="@+id/tvWorkingDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        tools:text="0h 0m"
+                        android:textSize="16sp"
+                        android:textColor="?attr/colorPrimary"
+                        android:visibility="gone"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -106,10 +120,11 @@
                                 android:textSize="12sp"
                                 android:textColor="?android:textColorHint" />
                             <TextView
+                                android:id="@+id/tvAssignedSite"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Project Site A"
+                                tools:text="Loading..."
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:textColor="?android:textColorPrimary" />
@@ -123,16 +138,18 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Location"
+                                android:text="Punch In Time"
                                 android:textSize="12sp"
                                 android:textColor="?android:textColorHint" />
                             <TextView
+                                android:id="@+id/tvPunchInTime"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="Checking..."
-                                android:textSize="14sp"
-                                android:textColor="?attr/colorSecondary" />
+                                tools:text="--:--"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="?android:textColorPrimary" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -173,13 +190,14 @@
                             android:textColor="?android:textColorHint"
                             android:textStyle="bold"/>
                         <TextView
+                            android:id="@+id/tvLocationStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Ready"
+                            tools:text="Acquiring..."
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="@color/success"/>
+                            android:textColor="@color/warning"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -187,7 +205,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
                     app:cardBackgroundColor="?attr/colorSurface">
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -202,44 +219,51 @@
                             android:textColor="?android:textColorHint"
                             android:textStyle="bold"/>
                         <TextView
+                            android:id="@+id/tvFaceStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Ready"
+                            tools:text="Checking..."
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="@color/success"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="?attr/colorSurface">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="TIME"
-                            android:textSize="10sp"
-                            android:textColor="?android:textColorHint"
-                            android:textStyle="bold"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="09:42 AM"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="?android:textColorPrimary"/>
+                            android:textColor="@color/warning"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
+
+            <!-- Map View Placeholder / Fragment container -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LIVE LOCATION"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="?android:textColorHint"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="12dp"
+                android:letterSpacing="0.05" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp">
+                
+                <fragment
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </com.google.android.material.card.MaterialCardView>
+            
+            <TextView
+                android:id="@+id/tvLocationDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                tools:text="Lat: 0.0, Lng: 0.0\nAccuracy: --"
+                android:textSize="12sp"
+                android:textColor="?android:textColorSecondary"/>
 
         </LinearLayout>
     </ScrollView>
