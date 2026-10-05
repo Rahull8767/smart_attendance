@@ -18,7 +18,7 @@ import com.company.fieldattendance.ui.ceo.CeoDashboardActivity;
 import com.company.fieldattendance.ui.provider.ProviderDashboardActivity;
 
 public class LoginActivity extends AppCompatActivity {
-    private EditText etEmployeeId, etPassword;
+    private EditText etEmail, etPassword;
     private Button btnLogin;
     private ProgressBar progressBar;
     private SessionManager sessionManager;
@@ -32,24 +32,23 @@ public class LoginActivity extends AppCompatActivity {
         sessionManager = new SessionManager(this);
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
-        etEmployeeId = findViewById(R.id.etEmployeeId);
+        etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         progressBar = findViewById(R.id.progressBar);
-
         btnLogin.setOnClickListener(v -> attemptLogin());
     }
 
     private void attemptLogin() {
-        String employeeId = etEmployeeId.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        if (employeeId.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please enter Employee ID and password", Toast.LENGTH_SHORT).show();
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        authViewModel.login(employeeId, password).observe(this, resource -> {
+        authViewModel.login(email, password).observe(this, resource -> {
             switch (resource.status) {
                 case LOADING:
                     progressBar.setVisibility(View.VISIBLE);

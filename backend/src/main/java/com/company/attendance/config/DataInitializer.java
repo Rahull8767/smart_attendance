@@ -30,25 +30,31 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (userRepository.count() == 0) {
-            
-            // 1. Create CEO
+        // 1. Create CEO
+        if (userRepository.findByEmail("ceo@test.com").isEmpty()) {
             User ceo = new User();
             ceo.setRole("ROLE_CEO");
             ceo.setEmail("ceo@test.com");
             ceo.setPasswordHash(passwordEncoder.encode("ChangeMe123!"));
             userRepository.save(ceo);
             System.out.println("Test CEO created: ceo@test.com");
+        }
 
-            // 2. Create Provider
-            Provider provider = new Provider();
+        // 2. Create Provider
+        Provider provider = null;
+        if (providerRepository.findAll().isEmpty()) {
+            provider = new Provider();
             provider.setCompanyName("Test Provider Agency");
             provider.setContactPerson("John Smith");
             provider.setEmail("provider@test.com");
             provider.setPhone("555-0100");
             provider.setStatus("ACTIVE");
             provider = providerRepository.save(provider);
+        } else {
+            provider = providerRepository.findAll().get(0);
+        }
 
+        if (userRepository.findByEmail("provider@test.com").isEmpty()) {
             User providerUser = new User();
             providerUser.setProviderId(provider.getId());
             providerUser.setRole("ROLE_PROVIDER");
@@ -56,8 +62,10 @@ public class DataInitializer implements CommandLineRunner {
             providerUser.setPasswordHash(passwordEncoder.encode("password123"));
             userRepository.save(providerUser);
             System.out.println("Test Provider created: provider@test.com");
+        }
 
-            // 3. Create Employee
+        // 3. Create Employee
+        if (userRepository.findByEmail("employee@test.com").isEmpty()) {
             User empUser = new User();
             empUser.setProviderId(provider.getId());
             empUser.setRole("ROLE_EMPLOYEE");

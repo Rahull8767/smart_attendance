@@ -1,41 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Brand Colors -->
-    <color name="primary">#6366F1</color>
-    <color name="primary_variant">#4F46E5</color>
+    <!-- Brand Colors (Teal & Blue) -->
+    <color name="primary">#14B8A6</color>
+    <color name="primary_variant">#0F9488</color>
     <color name="on_primary">#FFFFFF</color>
 
-    <color name="secondary">#A5B4FC</color>
-    <color name="secondary_variant">#818CF8</color>
-    <color name="on_secondary">#000000</color>
+    <color name="secondary">#4F6FFF</color>
+    <color name="secondary_variant">#6B7FFF</color>
+    <color name="on_secondary">#FFFFFF</color>
 
-    <!-- Backgrounds & Surfaces (Dark Theme) -->
-    <color name="background">#121212</color>
-    <color name="surface">#1E1E1E</color>
-    <color name="surface_elevated">#2D2D2D</color>
-    <color name="surface_elevated_high">#333333</color>
+    <!-- Backgrounds & Surfaces (Premium Deep Navy) -->
+    <!-- Level 0: Pure deepest background -->
+    <color name="background">#080F1C</color>
+    <!-- Level 1: Secondary background -->
+    <color name="background_secondary">#0D1626</color>
+    <!-- Level 2: Surface -->
+    <color name="surface">#111D2E</color>
+    <!-- Level 3: Elevated surface -->
+    <color name="surface_elevated">#162337</color>
+    <!-- Level 4: Cards -->
+    <color name="surface_card">#18263A</color>
+    <color name="surface_card_pressed">#20324A</color>
     
-    <color name="on_background">#F3F4F6</color>
-    <color name="on_surface">#E5E7EB</color>
-    <color name="on_surface_medium">#9CA3AF</color>
-    
-    <color name="input_background">#2A2A2A</color>
-    <color name="input_stroke">#374151</color>
+    <!-- Dividers & Borders -->
+    <color name="divider">#26364A</color>
 
-    <!-- Status Colors -->
-    <color name="success">#10B981</color>
+    <!-- Text Colors -->
+    <color name="text_primary">#F8FAFC</color>
+    <color name="text_secondary">#A8B3C2</color>
+    <color name="text_muted">#6F7C8F</color>
+    
+    <!-- Input Elements -->
+    <color name="input_background">#0D1626</color>
+    <color name="input_stroke">#26364A</color>
+    <color name="input_stroke_focused">#14B8A6</color>
+
+    <!-- Semantic / Status Colors -->
+    <!-- Success: Green -->
+    <color name="success">#22C55E</color>
     <color name="success_bg">#064E3B</color>
-    
+    <!-- Warning: Amber -->
     <color name="warning">#F59E0B</color>
     <color name="warning_bg">#78350F</color>
-    
+    <!-- Error: Red -->
     <color name="error">#EF4444</color>
     <color name="error_bg">#7F1D1D</color>
-    
-    <color name="info">#3B82F6</color>
+    <!-- Info: Sky Blue -->
+    <color name="info">#38BDF8</color>
+    <color name="info_bg">#0C4A6E</color>
 
-    <!-- Standard Colors -->
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="transparent">#00000000</color>
+    
+    <!-- Bottom Nav specific -->
+    <color name="nav_active">#14B8A6</color>
+    <color name="nav_inactive">#6F7C8F</color>
 </resources>

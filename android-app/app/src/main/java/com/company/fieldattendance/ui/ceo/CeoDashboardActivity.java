@@ -13,7 +13,6 @@ import com.company.fieldattendance.ui.auth.LoginActivity;
 public class CeoDashboardActivity extends AppCompatActivity {
 
     private SessionManager sessionManager;
-    private View btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,12 +20,18 @@ public class CeoDashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ceo_dashboard);
 
         sessionManager = new SessionManager(this);
-        btnLogout = findViewById(R.id.btnLogout);
 
-        btnLogout.setOnClickListener(v -> {
-            sessionManager.clearSession();
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+        com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = findViewById(R.id.bottomNavCeo);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_more) {
+                // Temporary logic: Log out on 'More' since we don't have the Settings screen yet
+                sessionManager.clearSession();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+                return true;
+            }
+            return true;
         });
     }
 }

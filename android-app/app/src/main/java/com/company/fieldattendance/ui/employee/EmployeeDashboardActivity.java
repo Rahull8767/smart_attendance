@@ -13,8 +13,8 @@ import com.company.fieldattendance.ui.auth.LoginActivity;
 public class EmployeeDashboardActivity extends AppCompatActivity {
     
     private SessionManager sessionManager;
-    private Button btnLogout, btnPunchIn;
-    private TextView tvPunchStatus, tvDemoBadge;
+    private Button btnPunchIn;
+    private TextView tvPunchStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,17 +22,19 @@ public class EmployeeDashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_employee_dashboard);
 
         sessionManager = new SessionManager(this);
-        btnLogout = findViewById(R.id.btnLogout);
         btnPunchIn = findViewById(R.id.btnPunch);
         tvPunchStatus = findViewById(R.id.tvPunchStatus);
-        tvDemoBadge = findViewById(R.id.tvDemoBadge);
 
-        tvDemoBadge.setVisibility(View.GONE);
-
-        btnLogout.setOnClickListener(v -> {
-            sessionManager.clearSession();
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+        com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.nav_profile) {
+                sessionManager.clearSession();
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+                return true;
+            }
+            return true;
         });
 
         btnPunchIn.setOnClickListener(v -> {

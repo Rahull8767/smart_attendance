@@ -37,6 +37,8 @@
         <activity android:name=".ui.employee.CorrectionRequestActivity" />
         <activity android:name=".ui.ceo.ReportsActivity" />
         <activity android:name=".ui.provider.ProviderDashboardActivity" />
+        <activity android:name=".ui.provider.AddEmployeeActivity" />
+        <activity android:name=".ui.provider.AddWorkSiteActivity" />
     </application>
 
 </manifest>
